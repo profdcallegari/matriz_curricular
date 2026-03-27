@@ -1,0 +1,140 @@
+Projeto: Matriz Curricular Interativa
+Autor: Prof. Daniel Callegari, 2026
+
+Título em português: Matriz Curricular Interativa
+Título em inglês: Interactive Degree Plan
+
+Objetivo Geral:
+Exibir a matriz curricular de um ou mais cursos de graduação de forma gráfica e interativa.
+
+Objetivo Específico:
+Um utilitário de linha de comando que, a partir de um arquivo json contendo a estrutura curricular de um curso, gera um único arquivo html+css+javascript, contendo a matriz curricular interativa, para ser hospedada em um servidor web simples.
+
+Detalhamento de um currículo de curso:
+- um currículo possui um nome, um código e um semestre inicial de vigência (ex. 2026/1), e uma descrição.
+- um currículo é organizado em níveis (semestres), tipicamente contendo 8 níveis (4 anos).
+- um currículo contém disciplinas.
+- cada disciplina tem um código, um nome, o número de horas e o número de créditos.
+- cada disciplina também possui:
+	- o nível que ocupa dentro do currículo (1, 2, 3 etc.)
+	- uma ementa (um texto)
+	- um conjunto de zero ou mais pre-requisitos (formando um grafo)
+	- um conjunto de zero ou mais tags adicionais, ex. "online", "extensionista"
+- cada pre-requisito poderá ser de um tipo:
+	- requisito comum: uma disciplina de algum nível anterior (representado como uma seta da disciplina anterior para a disciplina em questão).
+	- co-requisito: uma disciplina no mesmo nível da disciplina em questão (representado como uma seta com linha pontilhada da disciplina de mesmo nível para a disciplina em questão).
+	- requisito especial: uma disciplina de algum nível anterior (representado como uma seta com linha tracejada da disciplina anterior para a disciplina em questão)
+	- requisito de posição: contendo o número de créditos que o aluno já deverá ter cursado para poder cursar a disciplina em questão.
+
+Validações:
+- os códigos das disciplinas devem ser únicos
+- as posições das disciplinas que são pre-requisitos devem atender ao seu tipo, conforme descrição acima.
+
+
+Detalhamento do arquivo json de entrada (como um exemplo):
+{
+  "curriculum": {
+    "code": "CDIA-2026",
+    "name": "Bacharelado em Ciência de Dados e Inteligência Artificial",
+    "availableSince": "2026/1",
+    "description": "Matriz curricular do curso com foco em ciência de dados, IA e engenharia de dados.",
+    "levels": 8
+  },
+
+  "courses": [
+    {
+      "code": "MAT101",
+      "name": "Cálculo I",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Limites, derivadas e aplicações.",
+      "tags": []
+    },
+    {
+      "code": "PROG101",
+      "name": "Algoritmos e Programação",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Introdução à lógica de programação e algoritmos.",
+      "tags": ["online"]
+    },
+    {
+      "code": "MAT201",
+      "name": "Cálculo II",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Integrais e aplicações.",
+      "tags": []
+    },
+    {
+      "code": "EST301",
+      "name": "Estatística",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Probabilidade e estatística descritiva.",
+      "tags": ["extensionista"]
+    }
+  ],
+
+  "requirements": [
+    {
+      "type": "prerequisite",
+      "from": "MAT101",
+      "to": "MAT201"
+    },
+    {
+      "type": "prerequisite",
+      "from": "MAT201",
+      "to": "EST301"
+    },
+    {
+      "type": "corequisite",
+      "from": "PROG101",
+      "to": "MAT101"
+    },
+    {
+      "type": "special",
+      "from": "PROG101",
+      "to": "EST301",
+      "description": "Conhecimentos básicos de programação"
+    },
+    {
+      "type": "credit_requirement",
+      "to": "EST301",
+      "min_credits": 40
+    }
+  ]
+}
+
+Detalhamento da página web de saída:
+- Estética
+	- as informações gerais do curso devem aparecer no topo, com o título em destaque.
+	- os níveis devem ser organizados em colunas, da esquerda para a direita.
+	- cada coluna representa um dos níveis do curso e deverá conter um cabeçalho com o número do nível em algaristmos romanos maiúsculos e o total de créditos em disciplinas do nível correspondente.
+	- cada disciplina deve aparecer como um retângulo contendo o título da disciplina e o número de créditos; na parte inferior interna do retângulo, exibir as suas tags.
+	- deverá haver espaçamento suficiente entre os retângulos das disciplinas para sobrar espaço para as linhas indicadoras dos pre-requisitos.
+	- as linhas dos pré-requisitos e seus labels devem poder estar ou não graficamente visíveis: um switch global liga/desliga (linhas + labels).
+	- as linhas dos pré-requisitos e seus labels devem possuir caminhos por entre os retângulos das disciplinas, para que não obstruam a sua visão, com linhas em segmentos retos (não usar curvas).
+	- um painel de legenda sobre os elementos da matriz curricular poderá ser expandido ou retraído pelo usuário.
+	
+- Funcionalidades
+	- ao repousar o mouse (hover) sobre uma disciplina:
+		- destacar a disciplina em questão.
+		- destacar as disciplinas que são pre-requisito da disciplina em questão e as disciplinas que possuem a disciplina em questão como pre-requisito.
+		- esmaecer todas as demais disciplinas.
+		- desligar todas as linhas e labels de requisitos da matriz.
+		- ligar apenas as linhas e labels de requisitos da disciplina em questão (tanto das disciplinas que são pre-requisito da disciplina em questão quanto das disciplinas que possuem a disciplina em questão como pre-requisito).
+	- ao clicar em uma disciplina:
+		- exibir um painel (popup) com todos os detalhes da disciplina em questão.
+
+- Detalhes técnicos
+	- compatível com os principais navegadores: Chrome, Edge, Safari e Firefox.
+	- usar recursos HTML modernos.
+	- o processo de geração do arquivo de saída deve ser determinístico: para uma mesma entrada, deverá gerar sempre a mesma saída (html+css+javascript).
+
+
+Fim da descrição.

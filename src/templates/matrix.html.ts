@@ -1,0 +1,692 @@
+import { CurriculumFile, CourseInput, RequirementInput, ArrowRoute, Point, LayoutData, ColumnLayout, CardRect, RouteData } from '../types';
+import { CARD_WIDTH, COL_HEADER_H, HEADER_H, PAGE_MARGIN } from '../layout';
+
+// ─── Ponto de entrada ─────────────────────────────────────────────────────────
+
+export function renderHtml(
+  data: CurriculumFile,
+  layout: LayoutData,
+  routes: RouteData
+): string {
+  const courseMap    = new Map<string, CourseInput>(data.courses.map(c => [c.code, c]));
+  const reqMap       = new Map<number, RequirementInput>(data.requirements.map((r, i) => [i, r]));
+  const uniqueTags   = Array.from(new Set(data.courses.flatMap(c => c.tags)));
+  const creditReqMap = new Map<string, number>(
+    data.requirements
+      .filter(r => r.type === 'credit_requirement' && r.min_credits !== undefined)
+      .map(r => [r.to, r.min_credits!])
+  );
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${esc(data.curriculum.name)}</title>
+  <style>
+${renderCss(uniqueTags)}
+  </style>
+</head>
+<body>
+${renderHeader(data)}
+<div class="matrix-wrapper">
+  <div class="matrix-area" style="width:${layout.canvasWidth}px; min-height:${layout.canvasHeight}px;">
+    <div class="columns-row">
+${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditReqMap)).join('\n')}
+    </div>
+    <svg class="arrows-layer" width="${layout.canvasWidth}" height="${layout.canvasHeight}" aria-hidden="true">
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+        </marker>
+      </defs>
+${routes.arrows.map(a => renderArrow(a, reqMap)).join('\n')}
+    </svg>
+  </div>
+  <aside class="legend-panel">
+${renderLegend(uniqueTags)}
+${renderCreditSummary(data.courses, uniqueTags)}
+  </aside>
+</div>
+${renderPopup()}
+<script>
+${renderJs(data, layout, routes)}
+</script>
+</body>
+</html>`;
+}
+
+// ─── Cabeçalho ───────────────────────────────────────────────────────────────
+
+function renderHeader(data: CurriculumFile): string {
+  return `<header class="course-header">
+  <div class="course-title">${esc(data.curriculum.name)}</div>
+  <div class="course-meta">${esc(data.curriculum.code)} &bull; desde ${esc(data.curriculum.availableSince)}</div>
+</header>`;
+}
+
+// ─── Colunas e cartões ────────────────────────────────────────────────────────
+
+function renderColumn(col: ColumnLayout, courseMap: Map<string, CourseInput>, creditReqMap: Map<string, number>): string {
+  const roman = toRoman(col.level);
+  const cards = col.cards.map((card: CardRect) => {
+    const course = courseMap.get(card.courseCode)!;
+    const minCredits = creditReqMap.get(card.courseCode);
+    return renderCard(card, course, minCredits);
+  }).join('\n');
+
+  return `      <div class="level-column" data-level="${col.level}">
+        <div class="col-header">
+          <span class="col-roman">${roman}</span>
+          <span class="col-credits">${col.totalCredits} créditos</span>
+        </div>
+        <div class="cards-area">
+${cards}
+        </div>
+      </div>`;
+}
+
+function renderCard(card: CardRect, course: CourseInput, minCredits?: number): string {
+  const tags = course.tags.map(t => `<span class="tag tag-${esc(t)}">${esc(t)}</span>`).join('');
+  const creditBadge = minCredits !== undefined
+    ? `\n          <div class="credit-req-badge">${minCredits} CR</div>`
+    : '';
+  return `          <div class="card-wrapper">${creditBadge}
+            <div class="course-card"
+               id="card-${esc(course.code)}"
+               data-code="${esc(course.code)}"
+               tabindex="0"
+               role="button"
+               aria-label="${esc(course.name)}">
+              <div class="card-body">
+                <span class="card-name">${esc(course.name)}</span>
+                <span class="card-credits">(${course.credits})</span>
+              </div>
+              <div class="card-footer">${tags}</div>
+            </div>
+          </div>`;
+}
+
+// ─── Setas SVG ────────────────────────────────────────────────────────────────
+
+function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>): string {
+  const req = reqMap.get(arrow.requirementIndex);
+  const dashArray = arrowDash(arrow.type);
+  const pointsStr = arrow.points.map((p: Point) => `${p.x},${p.y}`).join(' ');
+  const from = req?.from ?? '';
+  const to   = req?.to   ?? '';
+
+  let labelEl = '';
+  if (arrow.label && arrow.points.length >= 2) {
+    const mid = arrow.points[Math.floor(arrow.points.length / 2)];
+    labelEl = `\n    <text class="arrow-label" x="${mid.x}" y="${mid.y - 4}">${esc(arrow.label)}</text>`;
+  }
+
+  return `    <g class="arrow-group"
+       data-type="${arrow.type}"
+       data-from="${esc(from)}"
+       data-to="${esc(to)}">
+      <polyline points="${pointsStr}"
+                stroke-dasharray="${dashArray}"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      ${labelEl}
+    </g>`;
+}
+
+function arrowDash(type: string): string {
+  if (type === 'special')     return '8,4';
+  if (type === 'corequisite') return '3,3';
+  return 'none';
+}
+
+// ─── Popup de detalhes ────────────────────────────────────────────────────────
+
+function renderPopup(): string {
+  return `<div id="course-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-name" hidden>
+  <div class="popup-content">
+    <button class="popup-close" aria-label="Fechar">&times;</button>
+    <div class="popup-header">
+      <span id="popup-code" class="popup-code"></span>
+      <h2 id="popup-name" class="popup-name"></h2>
+    </div>
+    <dl class="popup-details">
+      <dt>Carga horária</dt><dd id="popup-hours"></dd>
+      <dt>Créditos</dt><dd id="popup-credits"></dd>
+      <dt>Ementa</dt><dd id="popup-syllabus"></dd>
+      <dt>Tags</dt><dd id="popup-tags"></dd>
+      <dt>Pré-requisitos</dt><dd id="popup-prereqs"></dd>
+    </dl>
+  </div>
+</div>`;
+}
+
+// ─── Legenda ──────────────────────────────────────────────────────────────────
+
+function renderLegend(tags: string[]): string {
+  const svgDefs = `<defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs>`;
+  const tagItems = tags.map(t =>
+    `      <dt><span class="tag tag-${esc(t)}">${esc(t)}</span></dt>\n      <dd>Disciplina ${esc(t)}</dd>`
+  ).join('\n');
+  return `    <h2 class="legend-title">Legenda</h2>
+    <dl class="legend-list">
+      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Pré-requisito</dd>
+      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Pré-requisito especial (RE)</dd>
+      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Co-requisito</dd>
+      <dt><span class="credit-req-badge">XX CR</span></dt>
+      <dd>Requisito de créditos mínimos</dd>
+${tagItems}
+    </dl>
+    <div class="legend-toggle">
+      <label>
+        <input type="checkbox" id="toggle-arrows">
+        Exibir setas de pré-requisito
+      </label>
+    </div>
+    `;
+}
+
+// ─── Totalizador de créditos ────────────────────────────────────────────────
+
+function renderCreditSummary(courses: CourseInput[], uniqueTags: string[]): string {
+  const totalCredits = courses.reduce((sum, c) => sum + c.credits, 0);
+
+  const tagRows = uniqueTags.map(tag => {
+    const credits = courses
+      .filter(c => c.tags.includes(tag))
+      .reduce((sum, c) => sum + c.credits, 0);
+    return `      <tr>
+        <td><span class="tag tag-${esc(tag)}">${esc(tag)}</span></td>
+        <td class="credits-value">${credits}</td>
+      </tr>`;
+  }).join('\n');
+
+  return `    <div class="credits-summary">
+    <h2 class="legend-title">Créditos</h2>
+    <table class="credits-summary-table">
+      <tbody>
+        <tr class="credits-total-row">
+          <td>Total geral</td>
+          <td class="credits-value">${totalCredits}</td>
+        </tr>
+${uniqueTags.length > 0 ? tagRows : ''}
+      </tbody>
+    </table>
+    </div>`;
+}
+
+// ─── CSS ──────────────────────────────────────────────────────────────────────
+
+const TAG_PALETTE: Array<[string, string]> = [
+  ['#cce5ff', '#004085'],
+  ['#f8d7da', '#721c24'],
+  ['#d4edda', '#155724'],
+  ['#fff3cd', '#856404'],
+  ['#e2d9f3', '#4a235a'],
+  ['#fde8d8', '#7d3a0e'],
+  ['#d1ecf1', '#0c5460'],
+  ['#f5c6cb', '#6b1219'],
+  ['#c3e6cb', '#1b4f35'],
+  ['#ffeeba', '#533f03'],
+];
+
+function renderCss(tags: string[]): string {
+  const tagRules = tags.map((t, i) => {
+    const [bg, fg] = TAG_PALETTE[i % TAG_PALETTE.length];
+    return `    .tag-${esc(t)} { background: ${bg}; color: ${fg}; }`;
+  }).join('\n');
+  return `    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    /* Cabeçalho */
+    .course-header {
+      background: #1a3a6b;
+      color: #fff;
+      padding: 16px 24px;
+      text-align: left;
+    }
+    .course-title { font-size: 1.4rem; font-weight: bold; }
+    .course-meta  { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
+
+    /* Layout geral */
+    .matrix-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .matrix-area {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Colunas */
+    .columns-row {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .level-column {
+      width: ${CARD_WIDTH}px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .col-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: ${COL_HEADER_H}px;
+      justify-content: center;
+      background: #e8ecf5;
+      border-bottom: 2px solid #1a3a6b;
+      border-radius: 4px 4px 0 0;
+    }
+    .col-roman   { font-size: 1.1rem; font-weight: bold; color: #1a3a6b; }
+    .col-credits { font-size: 0.75rem; color: #555; }
+
+    .cards-area {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    /* Wrapper do cartão (para badge de créditos mínimos) */
+    .card-wrapper {
+      position: relative;
+      width: 100%;
+      height: 60px;
+    }
+
+    /* Badge de requisito de créditos mínimos */
+    .credit-req-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: #f0f0f0;
+      color: #555;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+      padding: 1px 5px;
+      white-space: nowrap;
+    }
+    .card-wrapper .credit-req-badge {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* Cartões de disciplina */
+    .course-card {
+      width: 100%;
+      height: 60px;
+      background: #fff;
+      border: 1.5px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, opacity 0.15s;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    .course-card:hover,
+    .course-card:focus {
+      box-shadow: 0 0 0 3px #1a3a6b55;
+      outline: none;
+    }
+    .course-card.highlighted {
+      border-color: #1a3a6b;
+      box-shadow: 0 0 0 3px #1a3a6b99;
+    }
+    .course-card.faded {
+      opacity: 0.25;
+    }
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 6px 8px 4px;
+      flex: 1;
+    }
+    .card-name    { font-size: 0.78rem; line-height: 1.3; }
+    .card-credits { font-size: 0.75rem; color: #555; white-space: nowrap; margin-left: 4px; }
+    .card-footer  { position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 6px 4px; display: flex; gap: 4px; flex-wrap: wrap; min-height: 16px; }
+    .card-footer:not(:empty) { background: rgba(255,255,255,0.85); }
+
+    /* Tags */
+    .tag {
+      font-size: 0.65rem;
+      border-radius: 10px;
+      padding: 1px 6px;
+      font-weight: 600;
+    }
+${tagRules}
+
+    /* Setas SVG */
+    .arrows-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .arrow-line {
+      fill: none;
+      stroke: #333;
+      stroke-width: 1.5;
+    }
+    .arrows-layer.hidden .arrow-group { display: none; }
+    .arrow-label {
+      font-size: 0.65rem;
+      fill: #555;
+    }
+
+    /* Legenda */
+    .legend-panel {
+      min-width: 180px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      flex-shrink: 0;
+    }
+    .legend-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+    .legend-list {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 10px;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+    .legend-list dt { display: flex; align-items: center; }
+    .legend-toggle {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      font-size: 0.8rem;
+    }
+    .legend-toggle label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #1a3a6b;
+    }
+    .legend-toggle input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      accent-color: #1a3a6b;
+    }
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .popup[hidden] { display: none; }
+    .popup-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .popup-close {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: 1.4rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #555;
+    }
+    .popup-header { margin-bottom: 12px; }
+    .popup-code   { font-size: 0.8rem; color: #888; }
+    .popup-name   { font-size: 1.1rem; margin-top: 2px; }
+    .popup-details {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 12px;
+      font-size: 0.85rem;
+    }
+    .popup-details dt { font-weight: 600; color: #555; }
+
+    /* Totalizador de créditos */
+    .credits-summary {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+    .credits-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    .credits-summary-table td {
+      padding: 3px 4px;
+      vertical-align: middle;
+    }
+    .credits-total-row td {
+      font-weight: 700;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eee;
+    }
+    .credits-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .credits-summary-table tr:not(.credits-total-row) td:first-child {
+      padding-top: 4px;
+    }`;  
+}
+
+// ─── JavaScript embutido ──────────────────────────────────────────────────────
+
+function renderJs(data: CurriculumFile, _layout: LayoutData, _routes: RouteData): string {
+  // Serializa apenas os dados necessários para o JS de interatividade
+  const courses = JSON.stringify(
+    data.courses.map(c => ({
+      code: c.code,
+      name: c.name,
+      hours: c.hours,
+      credits: c.credits,
+      syllabus: c.syllabus,
+      tags: c.tags,
+    }))
+  );
+
+  const requirements = JSON.stringify(
+    data.requirements.map(r => ({
+      type: r.type,
+      from: r.from ?? null,
+      to: r.to,
+      description: r.description ?? null,
+      min_credits: r.min_credits ?? null,
+    }))
+  );
+
+  return `(function () {
+  'use strict';
+
+  const COURSES = ${courses};
+  const REQUIREMENTS = ${requirements};
+
+  const courseMap = new Map(COURSES.map(c => [c.code, c]));
+
+  // ── Toggle de setas ─────────────────────────────────────────────────────────
+  const toggleArrows = document.getElementById('toggle-arrows');
+  const arrowsLayer  = document.querySelector('.arrows-layer');
+
+  // Estado inicial: setas ocultas (checkbox desmarcado)
+  arrowsLayer.classList.add('hidden');
+
+  toggleArrows.addEventListener('change', () => {
+    arrowsLayer.classList.toggle('hidden', !toggleArrows.checked);
+  });
+
+  // ── Hover sobre cartões ─────────────────────────────────────────────────────
+  const allCards = Array.from(document.querySelectorAll('.course-card'));
+  const allArrows = Array.from(document.querySelectorAll('.arrow-group'));
+
+  function getRelated(code) {
+    const prereqs = new Set();
+    const dependents = new Set();
+    for (const req of REQUIREMENTS) {
+      if (req.type === 'credit_requirement') continue;
+      if (req.to === code && req.from)   prereqs.add(req.from);
+      if (req.from === code)             dependents.add(req.to);
+    }
+    return { prereqs, dependents };
+  }
+
+  function onCardEnter(code) {
+    const { prereqs, dependents } = getRelated(code);
+    const related = new Set([code, ...prereqs, ...dependents]);
+
+    allCards.forEach(card => {
+      const c = card.dataset.code;
+      card.classList.toggle('highlighted', related.has(c));
+      card.classList.toggle('faded', !related.has(c));
+    });
+
+    // Remove hidden class so active arrows are always visible during hover
+    arrowsLayer.classList.remove('hidden');
+
+    allArrows.forEach(arrow => {
+      const from = arrow.dataset.from;
+      const to   = arrow.dataset.to;
+      const active = (from === code || to === code);
+      arrow.style.display = active ? '' : 'none';
+    });
+  }
+
+  function onCardLeave() {
+    allCards.forEach(card => {
+      card.classList.remove('highlighted', 'faded');
+    });
+    allArrows.forEach(arrow => {
+      arrow.style.display = '';
+    });
+    // Restore hidden state based on checkbox
+    arrowsLayer.classList.toggle('hidden', !toggleArrows.checked);
+  }
+
+  allCards.forEach(card => {
+    card.addEventListener('mouseenter', () => onCardEnter(card.dataset.code));
+    card.addEventListener('mouseleave', onCardLeave);
+    card.addEventListener('focusin',    () => onCardEnter(card.dataset.code));
+    card.addEventListener('focusout',   onCardLeave);
+  });
+
+  // ── Popup de detalhes ───────────────────────────────────────────────────────
+  const popup       = document.getElementById('course-popup');
+  const popupClose  = popup.querySelector('.popup-close');
+
+  function openPopup(code) {
+    const course = courseMap.get(code);
+    if (!course) return;
+
+    document.getElementById('popup-code').textContent    = course.code;
+    document.getElementById('popup-name').textContent    = course.name;
+    document.getElementById('popup-hours').textContent   = course.hours + ' h';
+    document.getElementById('popup-credits').textContent = course.credits + ' cr';
+    document.getElementById('popup-syllabus').textContent = course.syllabus;
+    document.getElementById('popup-tags').textContent    = course.tags.join(', ') || '—';
+
+    const prereqCodes = REQUIREMENTS
+      .filter(r => r.to === code && r.from)
+      .map(r => {
+        const prereqCourse = courseMap.get(r.from);
+        const label = prereqCourse ? r.from + ' – ' + prereqCourse.name : r.from;
+        return label + (r.description ? ' (' + r.description + ')' : '');
+      });
+    const creditReq = REQUIREMENTS.find(r => r.type === 'credit_requirement' && r.to === code);
+    if (creditReq) prereqCodes.push('mín. ' + creditReq.min_credits + ' CR cursados');
+
+    const prereqEl = document.getElementById('popup-prereqs');
+    prereqEl.innerHTML = '';
+    if (prereqCodes.length === 0) {
+      prereqEl.textContent = '—';
+    } else {
+      const ul = document.createElement('ul');
+      ul.style.cssText = 'list-style:none; padding:0; margin:0;';
+      prereqCodes.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = p;
+        ul.appendChild(li);
+      });
+      prereqEl.appendChild(ul);
+    }
+
+    popup.hidden = false;
+    popupClose.focus();
+  }
+
+  function closePopup() {
+    popup.hidden = true;
+  }
+
+  allCards.forEach(card => {
+    card.addEventListener('click', () => openPopup(card.dataset.code));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openPopup(card.dataset.code);
+      }
+    });
+  });
+
+  popupClose.addEventListener('click', closePopup);
+  popup.addEventListener('click', e => { if (e.target === popup) closePopup(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+})();`;
+}
+
+// ─── Utilitários ─────────────────────────────────────────────────────────────
+
+function esc(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function toRoman(n: number): string {
+  const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
+  const syms = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
+  let result = '';
+  for (let i = 0; i < vals.length; i++) {
+    while (n >= vals[i]) { result += syms[i]; n -= vals[i]; }
+  }
+  return result;
+}

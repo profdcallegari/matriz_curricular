@@ -1,0 +1,237 @@
+{
+  "curriculum": {
+    "code": "99TI",
+    "name": "Tecnologia em Informática",
+    "availableSince": "2024/1",
+    "description": "Matriz curricular do curso de Tecnologia em Informática.",
+    "levels": 5
+  },
+
+  "courses": [
+    {
+      "code": "TI101-04",
+      "name": "Introdução à Computação",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Visão geral da computação: história, áreas e aplicações. Representação da informação, sistemas de numeração e lógica booleana. Fundamentos de hardware e software.",
+      "tags": []
+    },
+    {
+      "code": "TI102-04",
+      "name": "Algoritmos e Programação",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Conceitos de algoritmos. Variáveis, tipos, expressões e comandos de controle de fluxo. Subprogramas e recursão. Implementação em linguagem de programação estruturada.",
+      "tags": []
+    },
+    {
+      "code": "TI103-04",
+      "name": "Matemática Discreta",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Lógica proposicional. Teoria dos conjuntos. Relações e funções. Combinatória e noções de grafos. Indução matemática.",
+      "tags": []
+    },
+    {
+      "code": "TI104-02",
+      "name": "Laboratório de Hardware",
+      "hours": 30,
+      "credits": 2,
+      "level": 1,
+      "syllabus": "Identificação e manutenção de componentes de hardware. Montagem e configuração de PCs. Diagnóstico de falhas e boas práticas de segurança no ambiente de laboratório.",
+      "tags": ["lab"]
+    },
+
+    {
+      "code": "TI201-04",
+      "name": "Programação Orientada a Objetos",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Paradigma orientado a objetos. Classes, objetos, herança, polimorfismo e encapsulamento. Coleções, exceções e entrada/saída. Projeto e implementação de pequenos sistemas.",
+      "tags": []
+    },
+    {
+      "code": "TI202-04",
+      "name": "Estruturas de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Listas, filas, pilhas, árvores e grafos. Algoritmos de busca e ordenação. Análise de complexidade de algoritmos.",
+      "tags": []
+    },
+    {
+      "code": "TI203-04",
+      "name": "Sistemas Operacionais",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Arquitetura e funcionamento de sistemas operacionais. Processos, threads e escalonamento. Gerência de memória, arquivos e dispositivos de entrada e saída.",
+      "tags": []
+    },
+    {
+      "code": "TI204-04",
+      "name": "Banco de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Modelos de dados relacionais. Modelagem conceitual (ER). Normalização e SQL. Introdução a bancos de dados não relacionais.",
+      "tags": []
+    },
+    {
+      "code": "TI205-02",
+      "name": "Comunicação Técnica",
+      "hours": 30,
+      "credits": 2,
+      "level": 2,
+      "syllabus": "Escrita técnica em Tecnologia da Informação. Documentação de projetos e sistemas. Apresentação oral e visual de resultados técnicos.",
+      "tags": ["online"]
+    },
+
+    {
+      "code": "TI301-04",
+      "name": "Redes de Computadores",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Modelos OSI e TCP/IP. Protocolos de rede, transporte e aplicação. Endereçamento IP, roteamento e fundamentos de segurança em redes.",
+      "tags": []
+    },
+    {
+      "code": "TI302-04",
+      "name": "Engenharia de Software",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Ciclo de vida de software. Metodologias ágeis e tradicionais. Levantamento de requisitos, design, testes e manutenção. Ferramentas de controle de versão e integração contínua.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "TI303-04",
+      "name": "Desenvolvimento Web",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Fundamentos de HTML, CSS e JavaScript. Frameworks front-end. Introdução a servidores web e APIs REST. Desenvolvimento de aplicações web responsivas.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "TI304-02",
+      "name": "Projeto Integrador I",
+      "hours": 30,
+      "credits": 2,
+      "level": 3,
+      "syllabus": "Desenvolvimento de um projeto integrador que aplica conhecimentos de programação, banco de dados e engenharia de software. Trabalho em equipe e apresentação de resultados.",
+      "tags": ["extensionista"]
+    },
+
+    {
+      "code": "TI401-04",
+      "name": "Segurança da Informação",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Princípios de confidencialidade, integridade e disponibilidade. Criptografia simétrica e assimétrica. Ameaças, vulnerabilidades e boas práticas de proteção de sistemas e dados.",
+      "tags": []
+    },
+    {
+      "code": "TI402-04",
+      "name": "Desenvolvimento Mobile",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Plataformas móveis. Desenvolvimento de aplicativos para Android e iOS com frameworks multiplataforma. Interface com o usuário, persistência e acesso a serviços web.",
+      "tags": []
+    },
+    {
+      "code": "TI403-04",
+      "name": "Infraestrutura em Nuvem",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Conceitos de computação em nuvem (IaaS, PaaS, SaaS). Provisionamento de servidores, armazenamento e bancos de dados em nuvem. Contêineres e orquestração com Docker e Kubernetes.",
+      "tags": []
+    },
+    {
+      "code": "TI404-02",
+      "name": "Introdução à Inteligência Artificial",
+      "hours": 30,
+      "credits": 2,
+      "level": 4,
+      "syllabus": "Panorama histórico e áreas da IA. Noções de aprendizado de máquina, visão computacional e processamento de linguagem natural. Ferramentas e APIs de IA aplicadas.",
+      "tags": []
+    },
+    {
+      "code": "TI405-02",
+      "name": "Ética em Tecnologia",
+      "hours": 30,
+      "credits": 2,
+      "level": 4,
+      "syllabus": "Aspectos éticos e legais do uso da tecnologia. Privacidade de dados e LGPD. Responsabilidade social, acessibilidade digital e impactos socioambientais da computação.",
+      "tags": ["online"]
+    },
+
+    {
+      "code": "TI501-04",
+      "name": "Gestão de Projetos de TI",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Fundamentos de gerenciamento de projetos. Planejamento, escopo, tempo, custo e qualidade. Metodologias PMI e Scrum aplicadas a projetos de TI.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "TI502-04",
+      "name": "Sistemas Distribuídos",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Arquiteturas de sistemas distribuídos. Comunicação entre processos e microsserviços. Consistência, tolerância a falhas e escalabilidade.",
+      "tags": []
+    },
+    {
+      "code": "TI503-04",
+      "name": "Projeto de Conclusão de Curso",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Desenvolvimento de um projeto de software completo, integrando competências adquiridas ao longo do curso. Documentação, testes, apresentação e defesa perante banca avaliadora.",
+      "tags": ["extensionista"]
+    }
+  ],
+
+  "requirements": [
+    { "type": "prerequisite", "from": "TI102-04", "to": "TI201-04" },
+    { "type": "prerequisite", "from": "TI102-04", "to": "TI202-04" },
+    { "type": "prerequisite", "from": "TI103-04", "to": "TI202-04" },
+    { "type": "prerequisite", "from": "TI101-04", "to": "TI203-04" },
+    { "type": "prerequisite", "from": "TI101-04", "to": "TI204-04" },
+
+    { "type": "prerequisite", "from": "TI203-04", "to": "TI301-04" },
+    { "type": "prerequisite", "from": "TI201-04", "to": "TI302-04" },
+    { "type": "prerequisite", "from": "TI204-04", "to": "TI302-04" },
+    { "type": "prerequisite", "from": "TI201-04", "to": "TI303-04" },
+    { "type": "prerequisite", "from": "TI202-04", "to": "TI304-02" },
+
+    { "type": "prerequisite", "from": "TI301-04", "to": "TI401-04" },
+    { "type": "prerequisite", "from": "TI303-04", "to": "TI402-04" },
+    { "type": "prerequisite", "from": "TI301-04", "to": "TI403-04" },
+    { "type": "prerequisite", "from": "TI302-04", "to": "TI501-04" },
+    { "type": "prerequisite", "from": "TI304-02", "to": "TI503-04" },
+
+    { "type": "prerequisite", "from": "TI403-04", "to": "TI502-04" },
+    { "type": "prerequisite", "from": "TI401-04", "to": "TI502-04" },
+    { "type": "prerequisite", "from": "TI402-04", "to": "TI503-04" },
+
+    { "type": "special", "from": "TI104-02", "to": "TI203-04" },
+    { "type": "special", "from": "TI404-02", "to": "TI503-04" },
+
+    { "type": "corequisite", "from": "TI302-04", "to": "TI304-02" },
+
+    { "type": "credit_requirement", "to": "TI501-04", "min_credits": 60 },
+    { "type": "credit_requirement", "to": "TI503-04", "min_credits": 90 }
+  ]
+}

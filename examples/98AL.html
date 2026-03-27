@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engenharia de Software</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    /* Cabeçalho */
+    .course-header {
+      background: #1a3a6b;
+      color: #fff;
+      padding: 16px 24px;
+      text-align: left;
+    }
+    .course-title { font-size: 1.4rem; font-weight: bold; }
+    .course-meta  { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
+
+    /* Layout geral */
+    .matrix-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .matrix-area {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Colunas */
+    .columns-row {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .level-column {
+      width: 140px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .col-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 48px;
+      justify-content: center;
+      background: #e8ecf5;
+      border-bottom: 2px solid #1a3a6b;
+      border-radius: 4px 4px 0 0;
+    }
+    .col-roman   { font-size: 1.1rem; font-weight: bold; color: #1a3a6b; }
+    .col-credits { font-size: 0.75rem; color: #555; }
+
+    .cards-area {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    /* Wrapper do cartão (para badge de créditos mínimos) */
+    .card-wrapper {
+      position: relative;
+      width: 100%;
+      height: 60px;
+    }
+
+    /* Badge de requisito de créditos mínimos */
+    .credit-req-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: #f0f0f0;
+      color: #555;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+      padding: 1px 5px;
+      white-space: nowrap;
+    }
+    .card-wrapper .credit-req-badge {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* Cartões de disciplina */
+    .course-card {
+      width: 100%;
+      height: 60px;
+      background: #fff;
+      border: 1.5px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, opacity 0.15s;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    .course-card:hover,
+    .course-card:focus {
+      box-shadow: 0 0 0 3px #1a3a6b55;
+      outline: none;
+    }
+    .course-card.highlighted {
+      border-color: #1a3a6b;
+      box-shadow: 0 0 0 3px #1a3a6b99;
+    }
+    .course-card.faded {
+      opacity: 0.25;
+    }
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 6px 8px 4px;
+      flex: 1;
+    }
+    .card-name    { font-size: 0.78rem; line-height: 1.3; }
+    .card-credits { font-size: 0.75rem; color: #555; white-space: nowrap; margin-left: 4px; }
+    .card-footer  { position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 6px 4px; display: flex; gap: 4px; flex-wrap: wrap; min-height: 16px; }
+    .card-footer:not(:empty) { background: rgba(255,255,255,0.85); }
+
+    /* Tags */
+    .tag {
+      font-size: 0.65rem;
+      border-radius: 10px;
+      padding: 1px 6px;
+      font-weight: 600;
+    }
+
+
+    /* Setas SVG */
+    .arrows-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .arrow-line {
+      fill: none;
+      stroke: #333;
+      stroke-width: 1.5;
+    }
+    .arrows-layer.hidden .arrow-group { display: none; }
+    .arrow-label {
+      font-size: 0.65rem;
+      fill: #555;
+    }
+
+    /* Legenda */
+    .legend-panel {
+      min-width: 180px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      flex-shrink: 0;
+    }
+    .legend-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+    .legend-list {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 10px;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+    .legend-list dt { display: flex; align-items: center; }
+    .legend-toggle {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      font-size: 0.8rem;
+    }
+    .legend-toggle label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #1a3a6b;
+    }
+    .legend-toggle input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      accent-color: #1a3a6b;
+    }
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .popup[hidden] { display: none; }
+    .popup-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .popup-close {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: 1.4rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #555;
+    }
+    .popup-header { margin-bottom: 12px; }
+    .popup-code   { font-size: 0.8rem; color: #888; }
+    .popup-name   { font-size: 1.1rem; margin-top: 2px; }
+    .popup-details {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 12px;
+      font-size: 0.85rem;
+    }
+    .popup-details dt { font-weight: 600; color: #555; }
+
+    /* Totalizador de créditos */
+    .credits-summary {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+    .credits-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    .credits-summary-table td {
+      padding: 3px 4px;
+      vertical-align: middle;
+    }
+    .credits-total-row td {
+      font-weight: 700;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eee;
+    }
+    .credits-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .credits-summary-table tr:not(.credits-total-row) td:first-child {
+      padding-top: 4px;
+    }
+  </style>
+</head>
+<body>
+<header class="course-header">
+  <div class="course-title">Engenharia de Software</div>
+  <div class="course-meta">98AL &bull; desde 2022/1</div>
+</header>
+<div class="matrix-wrapper">
+  <div class="matrix-area" style="width:1540px; min-height:712px;">
+    <div class="columns-row">
+      <div class="level-column" data-level="1">
+        <div class="col-header">
+          <span class="col-roman">I</span>
+          <span class="col-credits">20 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-254CF-02"
+               data-code="254CF-02"
+               tabindex="0"
+               role="button"
+               aria-label="Formação do Empreendedor">
+              <div class="card-body">
+                <span class="card-name">Formação do Empreendedor</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4611C-06"
+               data-code="4611C-06"
+               tabindex="0"
+               role="button"
+               aria-label="Fundamentos de Programação">
+              <div class="card-body">
+                <span class="card-name">Fundamentos de Programação</span>
+                <span class="card-credits">(6)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-95300-04"
+               data-code="95300-04"
+               tabindex="0"
+               role="button"
+               aria-label="Cálculo I">
+              <div class="card-body">
+                <span class="card-name">Cálculo I</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-95303-04"
+               data-code="95303-04"
+               tabindex="0"
+               role="button"
+               aria-label="Matemática Discreta">
+              <div class="card-body">
+                <span class="card-name">Matemática Discreta</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98705-02"
+               data-code="98705-02"
+               tabindex="0"
+               role="button"
+               aria-label="Introdução à Computação">
+              <div class="card-body">
+                <span class="card-name">Introdução à Computação</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98900-02"
+               data-code="98900-02"
+               tabindex="0"
+               role="button"
+               aria-label="Introdução à Engenharia de Software">
+              <div class="card-body">
+                <span class="card-name">Introdução à Engenharia de Software</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="2">
+        <div class="col-header">
+          <span class="col-roman">II</span>
+          <span class="col-credits">26 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4611E-04"
+               data-code="4611E-04"
+               tabindex="0"
+               role="button"
+               aria-label="Lógica para Computação">
+              <div class="card-body">
+                <span class="card-name">Lógica para Computação</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4611F-04"
+               data-code="4611F-04"
+               tabindex="0"
+               role="button"
+               aria-label="Programação Orientada a Objetos">
+              <div class="card-body">
+                <span class="card-name">Programação Orientada a Objetos</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4645G-04"
+               data-code="4645G-04"
+               tabindex="0"
+               role="button"
+               aria-label="Algoritmos e Estruturas de Dados I">
+              <div class="card-body">
+                <span class="card-name">Algoritmos e Estruturas de Dados I</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46506-04"
+               data-code="46506-04"
+               tabindex="0"
+               role="button"
+               aria-label="Engenharia de Requisitos">
+              <div class="card-body">
+                <span class="card-name">Engenharia de Requisitos</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46509-02"
+               data-code="46509-02"
+               tabindex="0"
+               role="button"
+               aria-label="Gerenciamento de Configuração de Software">
+              <div class="card-body">
+                <span class="card-name">Gerenciamento de Configuração de Software</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98800-04"
+               data-code="98800-04"
+               tabindex="0"
+               role="button"
+               aria-label="Fundamentos de Sistemas Computacionais">
+              <div class="card-body">
+                <span class="card-name">Fundamentos de Sistemas Computacionais</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98901-04"
+               data-code="98901-04"
+               tabindex="0"
+               role="button"
+               aria-label="Banco de Dados I">
+              <div class="card-body">
+                <span class="card-name">Banco de Dados I</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="3">
+        <div class="col-header">
+          <span class="col-roman">III</span>
+          <span class="col-credits">20 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4645H-04"
+               data-code="4645H-04"
+               tabindex="0"
+               role="button"
+               aria-label="Algoritmos e Estruturas de Dados II">
+              <div class="card-body">
+                <span class="card-name">Algoritmos e Estruturas de Dados II</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46515-04"
+               data-code="46515-04"
+               tabindex="0"
+               role="button"
+               aria-label="Linguagens, Autômatos e Computação">
+              <div class="card-body">
+                <span class="card-name">Linguagens, Autômatos e Computação</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46522-04"
+               data-code="46522-04"
+               tabindex="0"
+               role="button"
+               aria-label="Prática na Agência Experimental I (120h)">
+              <div class="card-body">
+                <span class="card-name">Prática na Agência Experimental I (120h)</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46526-02"
+               data-code="46526-02"
+               tabindex="0"
+               role="button"
+               aria-label="Programação de Software Básico">
+              <div class="card-body">
+                <span class="card-name">Programação de Software Básico</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-95304-04"
+               data-code="95304-04"
+               tabindex="0"
+               role="button"
+               aria-label="Probabilidade e Estatística">
+              <div class="card-body">
+                <span class="card-name">Probabilidade e Estatística</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98902-02"
+               data-code="98902-02"
+               tabindex="0"
+               role="button"
+               aria-label="Banco de Dados II">
+              <div class="card-body">
+                <span class="card-name">Banco de Dados II</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="4">
+        <div class="col-header">
+          <span class="col-roman">IV</span>
+          <span class="col-credits">22 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4646Z-04"
+               data-code="4646Z-04"
+               tabindex="0"
+               role="button"
+               aria-label="Projeto e Otimização de Algoritmos">
+              <div class="card-body">
+                <span class="card-name">Projeto e Otimização de Algoritmos</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46514-04"
+               data-code="46514-04"
+               tabindex="0"
+               role="button"
+               aria-label="Linguagens de Programação">
+              <div class="card-body">
+                <span class="card-name">Linguagens de Programação</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46523-04"
+               data-code="46523-04"
+               tabindex="0"
+               role="button"
+               aria-label="Prática na Agência Experimental II (120h)">
+              <div class="card-body">
+                <span class="card-name">Prática na Agência Experimental II (120h)</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98713-04"
+               data-code="98713-04"
+               tabindex="0"
+               role="button"
+               aria-label="Fundamentos de Processamento Paralelo e Distribuído">
+              <div class="card-body">
+                <span class="card-name">Fundamentos de Processamento Paralelo e Distribuído</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98903-02"
+               data-code="98903-02"
+               tabindex="0"
+               role="button"
+               aria-label="Processos de Software">
+              <div class="card-body">
+                <span class="card-name">Processos de Software</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98904-04"
+               data-code="98904-04"
+               tabindex="0"
+               role="button"
+               aria-label="Verificação e Validação de Software">
+              <div class="card-body">
+                <span class="card-name">Verificação e Validação de Software</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="5">
+        <div class="col-header">
+          <span class="col-roman">V</span>
+          <span class="col-credits">22 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46507-02"
+               data-code="46507-02"
+               tabindex="0"
+               role="button"
+               aria-label="Engenharia de Software Experimental">
+              <div class="card-body">
+                <span class="card-name">Engenharia de Software Experimental</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+          <div class="credit-req-badge">60 CR</div>
+            <div class="course-card"
+               id="card-46510-04"
+               data-code="46510-04"
+               tabindex="0"
+               role="button"
+               aria-label="Gerenciamento de Projeto de Software">
+              <div class="card-body">
+                <span class="card-name">Gerenciamento de Projeto de Software</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98700-04"
+               data-code="98700-04"
+               tabindex="0"
+               role="button"
+               aria-label="Sistemas Operacionais">
+              <div class="card-body">
+                <span class="card-name">Sistemas Operacionais</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98708-04"
+               data-code="98708-04"
+               tabindex="0"
+               role="button"
+               aria-label="Inteligência Artificial">
+              <div class="card-body">
+                <span class="card-name">Inteligência Artificial</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98905-04"
+               data-code="98905-04"
+               tabindex="0"
+               role="button"
+               aria-label="Experiência do Usuário">
+              <div class="card-body">
+                <span class="card-name">Experiência do Usuário</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98906-04"
+               data-code="98906-04"
+               tabindex="0"
+               role="button"
+               aria-label="Projeto e Arquitetura de Software">
+              <div class="card-body">
+                <span class="card-name">Projeto e Arquitetura de Software</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="6">
+        <div class="col-header">
+          <span class="col-roman">VI</span>
+          <span class="col-credits">20 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+          <div class="credit-req-badge">60 CR</div>
+            <div class="course-card"
+               id="card-1501A-04"
+               data-code="1501A-04"
+               tabindex="0"
+               role="button"
+               aria-label="Ética e Cidadania">
+              <div class="card-body">
+                <span class="card-name">Ética e Cidadania</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+          <div class="credit-req-badge">80 CR</div>
+            <div class="course-card"
+               id="card-4471V-02"
+               data-code="4471V-02"
+               tabindex="0"
+               role="button"
+               aria-label="Sistemas de Planejamento e Custos para Engenharia">
+              <div class="card-body">
+                <span class="card-name">Sistemas de Planejamento e Custos para Engenharia</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46504-04"
+               data-code="46504-04"
+               tabindex="0"
+               role="button"
+               aria-label="Construção de Software">
+              <div class="card-body">
+                <span class="card-name">Construção de Software</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98709-04"
+               data-code="98709-04"
+               tabindex="0"
+               role="button"
+               aria-label="Fundamentos de Redes de Computadores">
+              <div class="card-body">
+                <span class="card-name">Fundamentos de Redes de Computadores</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98710-02"
+               data-code="98710-02"
+               tabindex="0"
+               role="button"
+               aria-label="Laboratório de Redes de Computadores">
+              <div class="card-body">
+                <span class="card-name">Laboratório de Redes de Computadores</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98H00-04"
+               data-code="98H00-04"
+               tabindex="0"
+               role="button"
+               aria-label="Infraestrutura para Gestão de Dados">
+              <div class="card-body">
+                <span class="card-name">Infraestrutura para Gestão de Dados</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="7">
+        <div class="col-header">
+          <span class="col-roman">VII</span>
+          <span class="col-credits">20 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+          <div class="credit-req-badge">80 CR</div>
+            <div class="course-card"
+               id="card-13397-02"
+               data-code="13397-02"
+               tabindex="0"
+               role="button"
+               aria-label="Psicologia e Gestão de Pessoas em TI">
+              <div class="card-body">
+                <span class="card-name">Psicologia e Gestão de Pessoas em TI</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4471X-02"
+               data-code="4471X-02"
+               tabindex="0"
+               role="button"
+               aria-label="Engenharia Econômica">
+              <div class="card-body">
+                <span class="card-name">Engenharia Econômica</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4611G-04"
+               data-code="4611G-04"
+               tabindex="0"
+               role="button"
+               aria-label="Simulação e Métodos Analíticos">
+              <div class="card-body">
+                <span class="card-name">Simulação e Métodos Analíticos</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4636N-04"
+               data-code="4636N-04"
+               tabindex="0"
+               role="button"
+               aria-label="Infraestrutura de Tecnologia da Informação">
+              <div class="card-body">
+                <span class="card-name">Infraestrutura de Tecnologia da Informação</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-4646M-04"
+               data-code="4646M-04"
+               tabindex="0"
+               role="button"
+               aria-label="Métodos Formais para Computação">
+              <div class="card-body">
+                <span class="card-name">Métodos Formais para Computação</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46524-04"
+               data-code="46524-04"
+               tabindex="0"
+               role="button"
+               aria-label="Prática na Agência Experimental III (120h)">
+              <div class="card-body">
+                <span class="card-name">Prática na Agência Experimental III (120h)</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="level-column" data-level="8">
+        <div class="col-header">
+          <span class="col-roman">VIII</span>
+          <span class="col-credits">16 créditos</span>
+        </div>
+        <div class="cards-area">
+          <div class="card-wrapper">
+          <div class="credit-req-badge">60 CR</div>
+            <div class="course-card"
+               id="card-11521-04"
+               data-code="11521-04"
+               tabindex="0"
+               role="button"
+               aria-label="Humanismo e Cultura Religiosa">
+              <div class="card-body">
+                <span class="card-name">Humanismo e Cultura Religiosa</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46517-02"
+               data-code="46517-02"
+               tabindex="0"
+               role="button"
+               aria-label="Melhoria de Processos de Software">
+              <div class="card-body">
+                <span class="card-name">Melhoria de Processos de Software</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-46525-04"
+               data-code="46525-04"
+               tabindex="0"
+               role="button"
+               aria-label="Prática na Agência Experimental IV (120h)">
+              <div class="card-body">
+                <span class="card-name">Prática na Agência Experimental IV (120h)</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98715-04"
+               data-code="98715-04"
+               tabindex="0"
+               role="button"
+               aria-label="Segurança de Sistemas">
+              <div class="card-body">
+                <span class="card-name">Segurança de Sistemas</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98907-02"
+               data-code="98907-02"
+               tabindex="0"
+               role="button"
+               aria-label="Engenharia e Gestão do Conhecimento">
+              <div class="card-body">
+                <span class="card-name">Engenharia e Gestão do Conhecimento</span>
+                <span class="card-credits">(2)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <svg class="arrows-layer" width="1540" height="712" aria-hidden="true">
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+        </marker>
+      </defs>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="95303-04"
+       data-to="4611E-04">
+      <polyline points="140,354 170,354 170,102 200,102"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611C-06"
+       data-to="4611F-04">
+      <polyline points="140,186 200,186"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611C-06"
+       data-to="4645G-04">
+      <polyline points="140,186 170,186 170,270 200,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98900-02"
+       data-to="46506-04">
+      <polyline points="140,522 170,522 170,354 200,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4645G-04"
+       data-to="4645H-04">
+      <polyline points="340,270 370,270 370,102 400,102"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611F-04"
+       data-to="46522-04">
+      <polyline points="340,186 370,186 370,270 400,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98901-04"
+       data-to="98902-02">
+      <polyline points="340,606 370,606 370,522 400,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4645H-04"
+       data-to="4646Z-04">
+      <polyline points="540,102 600,102"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46515-04"
+       data-to="46514-04">
+      <polyline points="540,186 600,186"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46522-04"
+       data-to="46523-04">
+      <polyline points="540,270 600,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98901-04"
+       data-to="46523-04">
+      <polyline points="340,606 470,606 470,270 600,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46515-04"
+       data-to="98713-04">
+      <polyline points="540,186 570,186 570,354 600,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611F-04"
+       data-to="98713-04">
+      <polyline points="340,186 470,186 470,354 600,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46506-04"
+       data-to="98904-04">
+      <polyline points="340,354 470,354 470,522 600,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="95304-04"
+       data-to="46507-02">
+      <polyline points="540,438 670,438 670,102 800,102"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98800-04"
+       data-to="98700-04">
+      <polyline points="340,522 570,522 570,270 800,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611E-04"
+       data-to="98708-04">
+      <polyline points="340,102 570,102 570,354 800,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4645H-04"
+       data-to="98708-04">
+      <polyline points="540,102 670,102 670,354 800,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46506-04"
+       data-to="98905-04">
+      <polyline points="340,354 570,354 570,438 800,438"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611F-04"
+       data-to="98906-04">
+      <polyline points="340,186 570,186 570,522 800,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98906-04"
+       data-to="46504-04">
+      <polyline points="940,522 970,522 970,270 1000,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98902-02"
+       data-to="98H00-04">
+      <polyline points="540,522 1000,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98700-04"
+       data-to="98709-04">
+      <polyline points="940,270 970,270 970,354 1000,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="95304-04"
+       data-to="4611G-04">
+      <polyline points="540,438 870,438 870,270 1200,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98902-02"
+       data-to="4636N-04">
+      <polyline points="540,522 870,522 870,354 1200,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4611E-04"
+       data-to="4646M-04">
+      <polyline points="340,102 770,102 770,438 1200,438"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46504-04"
+       data-to="46524-04">
+      <polyline points="1140,270 1170,270 1170,522 1200,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46523-04"
+       data-to="46524-04">
+      <polyline points="740,270 970,270 970,522 1200,522"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="98904-04"
+       data-to="46517-02">
+      <polyline points="740,522 1070,522 1070,186 1400,186"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46524-04"
+       data-to="46525-04">
+      <polyline points="1340,522 1370,522 1370,270 1400,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="46510-04"
+       data-to="46525-04">
+      <polyline points="940,186 1170,186 1170,270 1400,270"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="prerequisite"
+       data-from="4646Z-04"
+       data-to="98715-04">
+      <polyline points="740,102 1070,102 1070,354 1400,354"
+                stroke-dasharray="none"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="98705-02"
+       data-to="98800-04">
+      <polyline points="140,438 170,438 170,522 200,522"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="170" y="518">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="95303-04"
+       data-to="46515-04">
+      <polyline points="140,354 270,354 270,186 400,186"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="270" y="182">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="98900-02"
+       data-to="46522-04">
+      <polyline points="140,522 270,522 270,270 400,270"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="270" y="266">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="46509-02"
+       data-to="46522-04">
+      <polyline points="340,438 370,438 370,270 400,270"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="370" y="266">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="4645G-04"
+       data-to="46526-02">
+      <polyline points="340,270 370,270 370,354 400,354"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="370" y="350">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="95300-04"
+       data-to="95304-04">
+      <polyline points="140,270 270,270 270,438 400,438"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="270" y="434">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="4471V-02"
+       data-to="4471X-02">
+      <polyline points="1140,186 1200,186"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="1200" y="182">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="special"
+       data-from="98904-04"
+       data-to="46524-04">
+      <polyline points="740,522 1200,522"
+                stroke-dasharray="8,4"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    <text class="arrow-label" x="1200" y="518">RE</text>
+    </g>
+    <g class="arrow-group"
+       data-type="corequisite"
+       data-from="98709-04"
+       data-to="98710-02">
+      <polyline points="1070,384 1070,396 1070,396 1070,408"
+                stroke-dasharray="3,3"
+                class="arrow-line"
+                marker-end="url(#arrowhead)"/>
+      
+    </g>
+    </svg>
+  </div>
+  <aside class="legend-panel">
+    <h2 class="legend-title">Legenda</h2>
+    <dl class="legend-list">
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Pré-requisito</dd>
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Pré-requisito especial (RE)</dd>
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dd>Co-requisito</dd>
+      <dt><span class="credit-req-badge">XX CR</span></dt>
+      <dd>Requisito de créditos mínimos</dd>
+
+    </dl>
+    <div class="legend-toggle">
+      <label>
+        <input type="checkbox" id="toggle-arrows">
+        Exibir setas de pré-requisito
+      </label>
+    </div>
+    
+    <div class="credits-summary">
+    <h2 class="legend-title">Créditos</h2>
+    <table class="credits-summary-table">
+      <tbody>
+        <tr class="credits-total-row">
+          <td>Total geral</td>
+          <td class="credits-value">166</td>
+        </tr>
+
+      </tbody>
+    </table>
+    </div>
+  </aside>
+</div>
+<div id="course-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-name" hidden>
+  <div class="popup-content">
+    <button class="popup-close" aria-label="Fechar">&times;</button>
+    <div class="popup-header">
+      <span id="popup-code" class="popup-code"></span>
+      <h2 id="popup-name" class="popup-name"></h2>
+    </div>
+    <dl class="popup-details">
+      <dt>Carga horária</dt><dd id="popup-hours"></dd>
+      <dt>Créditos</dt><dd id="popup-credits"></dd>
+      <dt>Ementa</dt><dd id="popup-syllabus"></dd>
+      <dt>Tags</dt><dd id="popup-tags"></dd>
+      <dt>Pré-requisitos</dt><dd id="popup-prereqs"></dd>
+    </dl>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+
+  const COURSES = [{"code":"254CF-02","name":"Formação do Empreendedor","hours":30,"credits":2,"syllabus":"Compreensão dos conceitos: empreendedorismo e empreendedor, empreendimento e empresa. Análise do contexto do empreendedorismo e da inovação. Caracterização do perfil empreendedor: motivação e liderança. Visão sobre a prática empreendedora e as ferramentas úteis ao empreendedor. Modelagem de Negócios e Plano de Negócios: estudo das suas etapas, processos e elaboração. Perspectivas do Empreendedorismo no Brasil.","tags":[]},{"code":"4611C-06","name":"Fundamentos de Programação","hours":90,"credits":6,"syllabus":"Discussão sobre algoritmos como ferramenta para a descrição da solução de problemas e os fundamentos necessários para sua implementação usando linguagens de programação. Exame das noções de constantes, variáveis, tipos e expressões. Estudo de programas sequenciais, comandos de entrada e saída e o processo de compilação. Construção de programas com seleção, iterativos e uso do conceito de subprogramas. Estudo e uso de estruturas de dados usando arranjos e matrizes e conceitos básicos de classes e objetos.","tags":[]},{"code":"95300-04","name":"Cálculo I","hours":60,"credits":4,"syllabus":"Caracterização de funções de uma variável. Estudo do domínio e representação gráfica dessas funções. Análise de limites e continuidade. Definições e aplicações de derivadas diferenciais.","tags":[]},{"code":"95303-04","name":"Matemática Discreta","hours":60,"credits":4,"syllabus":"Estudo da lógica proposicional e técnicas básicas de demonstração. Estudo da álgebra de conjuntos. Estudo e discussão dos conceitos de relações, funções totais e parciais, relações de ordem parcial e total e relações de equivalência. Análise de definições indutivas, recursão e do princípio de indução. Introdução à álgebra Booleana.","tags":[]},{"code":"98705-02","name":"Introdução à Computação","hours":30,"credits":2,"syllabus":"Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.","tags":[]},{"code":"98900-02","name":"Introdução à Engenharia de Software","hours":30,"credits":2,"syllabus":"Introdução aos conceitos relacionados a área de Engenharia de Software, incluindo processo, atividades, papéis e modelos de processo. Diferença entre a área de Engenharia de Software e outras Engenharias e cursos de computação. Estudo dos modelos de ciclos de vida de software e das disciplinas relacionadas à Engenharia de Software.","tags":[]},{"code":"4611E-04","name":"Lógica para Computação","hours":60,"credits":4,"syllabus":"Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.","tags":[]},{"code":"4611F-04","name":"Programação Orientada a Objetos","hours":60,"credits":4,"syllabus":"Desenvolvimento de sistemas de software de complexidade média utilizando o paradigma de orientação a objetos. Estudo e análise dos conceitos de abstração, herança e polimorfismo. Discussão de aspectos avançados sobre classes. Uso de bibliotecas de coleções. Projeto de sistemas orientados a objetos. Manipulação básica de arquivos texto. Noções de programação orientada a eventos.","tags":[]},{"code":"4645G-04","name":"Algoritmos e Estruturas de Dados I","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados lineares e hierárquicas: listas, filas, pilhas e árvores. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Construção de algoritmos e implementações para problemas de ordenação e pesquisa. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"46506-04","name":"Engenharia de Requisitos","hours":60,"credits":4,"syllabus":"Estudo de conceitos e fundamentos básicos sobre engenharia de requisitos. Estudo do ciclo de vida de requisitos e os processos associados. Compreensão da distinção entre requisitos de negócio, de sistema, funcionais e não funcionais. Compreensão do processo de negociação e definição do escopo de um sistema de software. Estudo de metodologias, técnicas e ferramentas para apoio à engenharia de requisitos.","tags":[]},{"code":"46509-02","name":"Gerenciamento de Configuração de Software","hours":30,"credits":2,"syllabus":"Estudo do processo de gerenciamento de configuração de software no que tange a sua identificação e planejamento, a verificação e auditoria da configuração, o controle de mudanças e o gerenciamento de entregas. Análise e apresentação de opções de ferramentas de apoio ao gerenciamento de configuração de software.","tags":[]},{"code":"98800-04","name":"Fundamentos de Sistemas Computacionais","hours":60,"credits":4,"syllabus":"Estudo dos sistemas de numeração. Introdução a um sistema computacional básico: entrada e saída, unidade de processamento e memória. Apresentação da relação software-hardware: conceito de operação com o processador, linguagem de montagem, compiladores, montadores, ligadores e carregadores. Estudo de circuitos combinacionais e otimização de representações Booleanas: portas lógicas e formas algébricas. Exploração de problemas básicos: definição de caminho crítico e tipos de conflitos em processadores pipeline. Apresentação dos princípios e padrões subjacentes a sistemas de entrada e saída em sistemas computacionais. Estudo de conceitos relativos à hierarquia de memória, com foco no papel da memória cache. Estudo de conceitos básicos de multiprocessamento. Avaliação de desempenho de arquiteturas de computadores.","tags":[]},{"code":"98901-04","name":"Banco de Dados I","hours":60,"credits":4,"syllabus":"Entendimento da arquitetura típica de um banco de dados. Estudo sobre modelos de dados: clássicos, relacional e pós-relacionais. Compreensão dos diferentes formalismos para modelagem conceitual. Solução de projetos de bancos de dados pelo uso de dependências funcionais, formas normais e de restrições de integridade. Solução de implementação de bancos de dados: modelo lógico e físico, e mapeamento do modelo conceitual para o de implementação.","tags":[]},{"code":"4645H-04","name":"Algoritmos e Estruturas de Dados II","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"46515-04","name":"Linguagens, Autômatos e Computação","hours":60,"credits":4,"syllabus":"Introdução às linguagens formais: definições, propriedades e operações. Estudo de linguagens na hierarquia de Chomsky: regulares, livres de contexto, sensíveis ao contexto, enumeráveis recursivamente. Estudo de máquinas como reconhecedores de linguagens: autômatos finitos, autômatos de pilha e máquinas de Turing. Estudo teórico prático de expressões regulares. Introdução ao conceito de computabilidade.","tags":[]},{"code":"46522-04","name":"Prática na Agência Experimental I (120h)","hours":60,"credits":4,"syllabus":"Realização de atividades integradoras de capacitação e qualificação na Agência Experimental de Engenharia de Software. Desenvolvimento de habilidades e competências em Engenharia de Software por meio de atuação em projetos de desenvolvimento de software. Estabelecimento de relações entre o conhecimento teórico e a aplicação prática da Engenharia de Software.","tags":[]},{"code":"46526-02","name":"Programação de Software Básico","hours":30,"credits":2,"syllabus":"Estudo de linguagem de programação adequada para os chamados sistemas \"de software básico\" ou que exijam alto desempenho. Aprendizado de uma linguagem de programação que tenha acesso direto a recursos de hardware e sistema operacional, e que propicie implementações eficientes.","tags":[]},{"code":"95304-04","name":"Probabilidade e Estatística","hours":60,"credits":4,"syllabus":"Organização, análise, interpretação de dados e estudo de modelos probabilísticas enfatizando o princípio da incerteza. Investigação da relação entre variáveis. Noções de amostragem visando à estimação de parâmetros e o estabelecimento de hipóteses estatísticas.","tags":[]},{"code":"98902-02","name":"Banco de Dados II","hours":30,"credits":2,"syllabus":"Visão geral das principais formas de uso de bancos de dados: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Visão geral da definição de dados na abordagem relacional, em modelos OLAP, bem como nas abordagens sem esquemas prévios (NoSQL). Estudo sobre linguagens de definição e manipulação de banco de dados e, em especial, SQL. Definição e consultas de dados nas principais formas de uso de bancos de dados, com entendimento dos principais fatores envolvidos com desempenho.","tags":[]},{"code":"4646Z-04","name":"Projeto e Otimização de Algoritmos","hours":60,"credits":4,"syllabus":"Estudo teórico e prático das principais técnicas para o projeto de algoritmos, como algoritmos gulosos, divisão e conquista, programação dinâmica, backtracking, branch and bound e algoritmos aproximativos como algoritmos genéticos, gradiente descendente e outros.","tags":[]},{"code":"46514-04","name":"Linguagens de Programação","hours":60,"credits":4,"syllabus":"Introdução aos processos de compilação e interpretação. Apresentação de conceitos de análise léxica, sintaxe e de semântica de linguagens, incluindo: amarração, tipos de dados, avaliação de expressões, passagem de parâmetros. Estudo comparativo de paradigmas de linguagens de programação.","tags":[]},{"code":"46523-04","name":"Prática na Agência Experimental II (120h)","hours":60,"credits":4,"syllabus":"Realização de atividades integradoras de capacitação e qualificação na Agência Experimental de Engenharia de Software. Aprofundamento de habilidades e competências em Engenharia de Software por meio de atuação em projetos de desenvolvimento de software. Estabelecimento de relações entre o conhecimento teórico e a aplicação prática da Engenharia de Software.","tags":[]},{"code":"98713-04","name":"Fundamentos de Processamento Paralelo e Distribuído","hours":60,"credits":4,"syllabus":"Introdução à computação concorrente e sua representação com sistemas de transição de estados. Estudo de processos e threads. Estudo sobre memória compartilhada e passagem de mensagem. Descrição da semântica de mecanismos de sincronização e seu uso na programação concorrente. Apresentação de abordagens para modelagem e avaliação de propriedades de sistemas concorrentes. Apresentação dos objetivos e pressupostos ambientais para sistemas paralelos e para sistemas distribuídos. Análise das abordagens para modelagem de aplicações paralelas com memória compartilhada e passagem de mensagem. Estudo das principais abstrações para programação distribuída. Apresentação de estudos de caso de sistemas paralelos e de sistemas distribuídos.","tags":[]},{"code":"98903-02","name":"Processos de Software","hours":30,"credits":2,"syllabus":"Apresentação das metodologias de desenvolvimento de software e metodologias ágeis. Estudo de lean e user centered design. Integração entre metodologias ágeis, lean e user centered design. Apresentação de tendências no processo de desenvolvimento de software.","tags":[]},{"code":"98904-04","name":"Verificação e Validação de Software","hours":60,"credits":4,"syllabus":"Apresentação dos conceitos fundamentais de qualidade de software no contexto de processo de software. Discussão do conceito de Dependabilidade para compreender a qualidade de um produto de software, com ênfase na confiabilidade. Discussão dos conceitos de verificação e validação como técnicas de remoção de falhas. Apresentação dos níveis de verificação e validação. Estudo teórico-prático de técnicas e ferramentas para verificação e validação de software em diferentes plataformas.","tags":[]},{"code":"46507-02","name":"Engenharia de Software Experimental","hours":30,"credits":2,"syllabus":"Estudo de conceitos introdutórios sobre e Engenharia de Software Experimental, incluindo conceitos de experimentação e método científico. Caracterização de tipos de estudos experimentais e não-experimentais (empíricos) na Engenharia de Software, focando em revisão da literatura, estudos de caso, surveys, experimentos controlados e estudos baseados em simulações. Planejamento e execução de estudos experimentais no contexto da Engenharia de Software. Apresentação de técnicas de coleta e análise qualitativa e quantitativa de dados para apoio ao desenvolvimento de estudos experimentais em Engenharia de Software.","tags":[]},{"code":"46510-04","name":"Gerenciamento de Projeto de Software","hours":60,"credits":4,"syllabus":"Estudo do conceito e dos objetivos da gerência de projetos e apresentação do ciclo de vida de gerenciamento de projeto, de seus processos e dos papéis envolvidos. Discussão do alinhamento de um projeto de Tecnologia da Informação (TI) com as estratégias organizacionais. Compreensão sobre um portfólio de projetos de TI e sobre o PMO (Project Management Office). Estudo de metodologias, técnicas e ferramentas para o apoio do gerenciamento de projeto de TI.","tags":[]},{"code":"98700-04","name":"Sistemas Operacionais","hours":60,"credits":4,"syllabus":"Apresentação da organização básica de sistemas operacionais. Estudo da evolução da estrutura e funcionamento dos sistemas operacionais. Apresentação do conceito de processos e de mecanismos de sincronização entre processos que compartilham memória e sua implementação em um sistema operacional. Exemplos práticos de criação e sincronização de processos. Introdução e exploração do conceito de algoritmos de escalonamento. Estudo da comunicação inter-processos. Análise e discussão de problemas relacionados à \"deadlock\" e à comunicação entre processos. Estudo sobre gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos. Análise e discussão de problemas relacionados ao gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos.","tags":[]},{"code":"98708-04","name":"Inteligência Artificial","hours":60,"credits":4,"syllabus":"Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos. Introdução ao Aprendizado de Máquina com ênfase em Aprendizado por reforço.","tags":[]},{"code":"98905-04","name":"Experiência do Usuário","hours":60,"credits":4,"syllabus":"Reflexão sobre conceitos e teorias relacionados à qualidade de uso e design de sistemas interativos. Aplicação de técnicas para elicitação e análise de dados sobre usuários e tarefas. Aplicação de fundamentos e técnicas para concepção de interfaces e de interação. Aplicação de métodos de avaliação de sistemas interativos. Investigação de interfaces não-convencionais e seu impacto em sistemas interativos.","tags":[]},{"code":"98906-04","name":"Projeto e Arquitetura de Software","hours":60,"credits":4,"syllabus":"Introdução aos conceitos fundamentais de projeto de software. Estudo de arquiteturas de referência, padrões de arquitetura e de projeto. Uso de notações de projeto de software. Aplicação de métodos e estratégias de projeto de software. Uso de ferramentas de projeto.","tags":[]},{"code":"1501A-04","name":"Ética e Cidadania","hours":60,"credits":4,"syllabus":"Abordagem de problemas e conceitos filosóficos relacionados à moralidade e ao exercício da cidadania. Introdução aos principais temas e problemas de Ética, presentes na História da Filosofia. Reflexão filosófica sobre o ideal democrático, a cidadania e os direitos humanos.","tags":[]},{"code":"4471V-02","name":"Sistemas de Planejamento e Custos para Engenharia","hours":30,"credits":2,"syllabus":"Introdução ao planejamento estratégico e indicadores de desempenho. Estudo de modelos econométricos de análise da oferta e da demanda. Estudo de planejamento integrado de vendas, produção e suprimentos. Análise de custos em engenharia: custos diretos e custos indiretos; custos fixos e custos variáveis; custo total e custo unitário. Análise econômica para tomada de decisão: receitas, custos, lucro e cálculo do ponto de equilíbrio em empresas multiprodutos e multiprocessos.","tags":[]},{"code":"46504-04","name":"Construção de Software","hours":60,"credits":4,"syllabus":"Visão geral sobre os fundamentos de construção de software. Estudo de conceitos relacionados à reutilização de software. Entendimento e exploração dos conceitos de frameworks, componentes e linhas de produtos de software. Conhecimento dos conceitos de engenharia de software dirigida por modelos. Desenvolvimento e uso de ferramentas de reutilização de software.","tags":[]},{"code":"98H00-04","name":"Infraestrutura para Gestão de Dados","hours":60,"credits":4,"syllabus":"Visão geral de sistemas de bancos de dados, suas principais funcionalidades e formas de uso: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Entendimento dos modelos de transações de bancos de dados, de gerência de memória principal e secundária, de controle de concorrência e de recuperação após falhas. Estudo sobre a otimização de consultas e de transações em bancos de dados. Visão geral sobre a gestão de bancos de dados sem esquemas prévios.","tags":[]},{"code":"98709-04","name":"Fundamentos de Redes de Computadores","hours":60,"credits":4,"syllabus":"Estudo dos Modelos de referência de interconexão de computadores OSI/ISO e da Arquitetura Internet, apresentando em mais detalhamento os Níveis de Rede, Transporte e Aplicação, com seus conceitos, funções e protocolos. Estudo e análise do impacto das funções dos protocolos de comunicação no desenvolvimento e desempenho das aplicações.","tags":[]},{"code":"98710-02","name":"Laboratório de Redes de Computadores","hours":30,"credits":2,"syllabus":"Desenvolvimento de experimentos que abranjam operação, configuração e análise de protocolos da Arquitetura Internet. Desenvolvimento e análise de comportamento de aplicações distribuídas com diferentes requisitos de qualidade. Simulação e análise de arquiteturas de comunicação variadas.","tags":[]},{"code":"13397-02","name":"Psicologia e Gestão de Pessoas em TI","hours":30,"credits":2,"syllabus":"Estudo de contribuições da psicologia à gestão de pessoas. Interfaces entre percepção, comunicação e relações interpessoais. Estudo dos papéis grupais. Reflexão sobre liderança e motivação no contexto de trabalho contemporâneo. Implicações das contínuas mudanças de base tecnológica para usuários e profissionais de TI.","tags":[]},{"code":"4471X-02","name":"Engenharia Econômica","hours":30,"credits":2,"syllabus":"Introdução à engenharia econômica e à análise de projetos de investimento. Estudo de conceitos de matemática financeira: juros e taxas de juros, valor do dinheiro no tempo e sistemas de amortização de financiamentos. Apresentação de critérios para avaliação econômica de projetos de investimento: valor presente líquido, valor uniforme líquido, taxa interna de retorno e tempo de recuperação do capital. Análise de depreciação e imposto de renda.","tags":[]},{"code":"4611G-04","name":"Simulação e Métodos Analíticos","hours":60,"credits":4,"syllabus":"Estudo de técnicas e opções para simulação e análise estocástica através de modelos computacionais. Apresentação de técnicas de representação de estados e de tempo, de aleatoriedade e determinismo em contexto computacional. Estudo de métodos e ferramentas básicas de simulação e métodos analíticos. Apresentação de formalismos clássicos e estruturados para representação de modelos.","tags":[]},{"code":"4636N-04","name":"Infraestrutura de Tecnologia da Informação","hours":60,"credits":4,"syllabus":"Apresentação dos componentes que formam uma infraestrutura de Tecnologia de Informação (TI) e suas funções. Estudo dos principais pontos relacionados à infraestrutura de TI nos modelos de gestão de TI. Análise do uso de técnicas de virtualização. Apresentação dos principais dispositivos para processamento, comunicação e armazenamento. Estudo das características da infraestrutura em ambientes de computação em nuvem. Apresentação do conceito de Green IT. Avaliação de estudos de casos de infraestrutura de TI.","tags":[]},{"code":"4646M-04","name":"Métodos Formais para Computação","hours":60,"credits":4,"syllabus":"Conceitos essenciais de especificação formal, verificação formal e métodos formais. Especificação e verificação de modelos e programas. Estudo da lógica de Hoare. Especificação de assertivas, pré e pós-condições, invariantes e variantes. Aplicação de ferramentas de verificação automática sobre especificações e programas.","tags":[]},{"code":"46524-04","name":"Prática na Agência Experimental III (120h)","hours":60,"credits":4,"syllabus":"Realização de atividades integradoras de capacitação e qualificação na Agência Experimental de Engenharia de Software. Aprofundamento de habilidades e competências em Engenharia de Software por meio de atuação em projetos de desenvolvimento de software. Estabelecimento de relações entre o conhecimento teórico e a aplicação prática da Engenharia de Software.","tags":[]},{"code":"11521-04","name":"Humanismo e Cultura Religiosa","hours":60,"credits":4,"syllabus":"A condição humana aberta ao transcendente; Fé cristã e cultura atual; O estudo do fenômeno religioso em suas diferentes Tradições; Elementos da cultura e da religiosidade afro-brasileira e indígena; A relação entre fé e razão, e ciência e religião; Motivação para ações comunitárias, como engajamento consequente de uma consciência social e da fé cristã.","tags":[]},{"code":"46517-02","name":"Melhoria de Processos de Software","hours":30,"credits":2,"syllabus":"Fundamentação de melhoria e avaliação de processo de software. Estudo sobre qualidade de serviço. Definição de métricas de software. Uso de ferramentas de processo de software. Definição e avaliação de processos de software.","tags":[]},{"code":"46525-04","name":"Prática na Agência Experimental IV (120h)","hours":60,"credits":4,"syllabus":"Realização de atividades integradoras de capacitação e qualificação na Agência Experimental de Engenharia de Software. Aprofundamento de habilidades e competências em Engenharia de Software por meio de atuação em projetos de desenvolvimento de software. Estabelecimento de relações entre o conhecimento teórico e a aplicação prática da Engenharia de Software.","tags":[]},{"code":"98715-04","name":"Segurança de Sistemas","hours":60,"credits":4,"syllabus":"Apresentação e implementação de criptografia clássica; cifras de fluxo (stream ciphers) e cifras de bloco (block ciphers). Entendimento de integridade de mensagens (Message Authentication Codes). Conhecimento de criptografia simétrica, aritmética modular; números primos e fatoração, funções e geradores pseudo-aleatórios, e criptografia assimétrica. Uso de bibliotecas de criptografia. Apresentação do Marco Civil da Internet. Entendimento e como cumprir a Lei de Proteção de Dados.","tags":[]},{"code":"98907-02","name":"Engenharia e Gestão do Conhecimento","hours":30,"credits":2,"syllabus":"Introdução à sociedade e economia do conhecimento. Apresentação dos conceitos de dado, informação e conhecimento. Apresentação da definição de Engenharia e Gestão do Conhecimento. Estudo de organizações baseadas em conhecimento. Análise e diagnóstico de Gestão do Conhecimento em organizações. Estudo de organizações de conhecimento. Apresentação de práticas e de ferramentas de Gestão do Conhecimento. Apresentação de inovações, novas tendências, ecossistemas de inovação e ambientes de inovação em Gestão do Conhecimento.","tags":[]}];
+  const REQUIREMENTS = [{"type":"prerequisite","from":"95303-04","to":"4611E-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611C-06","to":"4611F-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611C-06","to":"4645G-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98900-02","to":"46506-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4645G-04","to":"4645H-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611F-04","to":"46522-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98901-04","to":"98902-02","description":null,"min_credits":null},{"type":"prerequisite","from":"4645H-04","to":"4646Z-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46515-04","to":"46514-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46522-04","to":"46523-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98901-04","to":"46523-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46515-04","to":"98713-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611F-04","to":"98713-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46506-04","to":"98904-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95304-04","to":"46507-02","description":null,"min_credits":null},{"type":"prerequisite","from":"98800-04","to":"98700-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611E-04","to":"98708-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4645H-04","to":"98708-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46506-04","to":"98905-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611F-04","to":"98906-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98906-04","to":"46504-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98902-02","to":"98H00-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98700-04","to":"98709-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95304-04","to":"4611G-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98902-02","to":"4636N-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611E-04","to":"4646M-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46504-04","to":"46524-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46523-04","to":"46524-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98904-04","to":"46517-02","description":null,"min_credits":null},{"type":"prerequisite","from":"46524-04","to":"46525-04","description":null,"min_credits":null},{"type":"prerequisite","from":"46510-04","to":"46525-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4646Z-04","to":"98715-04","description":null,"min_credits":null},{"type":"special","from":"98705-02","to":"98800-04","description":null,"min_credits":null},{"type":"special","from":"95303-04","to":"46515-04","description":null,"min_credits":null},{"type":"special","from":"98900-02","to":"46522-04","description":null,"min_credits":null},{"type":"special","from":"46509-02","to":"46522-04","description":null,"min_credits":null},{"type":"special","from":"4645G-04","to":"46526-02","description":null,"min_credits":null},{"type":"special","from":"95300-04","to":"95304-04","description":null,"min_credits":null},{"type":"special","from":"4471V-02","to":"4471X-02","description":null,"min_credits":null},{"type":"special","from":"98904-04","to":"46524-04","description":null,"min_credits":null},{"type":"corequisite","from":"98709-04","to":"98710-02","description":null,"min_credits":null},{"type":"credit_requirement","from":null,"to":"46510-04","description":null,"min_credits":60},{"type":"credit_requirement","from":null,"to":"1501A-04","description":null,"min_credits":60},{"type":"credit_requirement","from":null,"to":"4471V-02","description":null,"min_credits":80},{"type":"credit_requirement","from":null,"to":"13397-02","description":null,"min_credits":80},{"type":"credit_requirement","from":null,"to":"11521-04","description":null,"min_credits":60}];
+
+  const courseMap = new Map(COURSES.map(c => [c.code, c]));
+
+  // ── Toggle de setas ─────────────────────────────────────────────────────────
+  const toggleArrows = document.getElementById('toggle-arrows');
+  const arrowsLayer  = document.querySelector('.arrows-layer');
+
+  // Estado inicial: setas ocultas (checkbox desmarcado)
+  arrowsLayer.classList.add('hidden');
+
+  toggleArrows.addEventListener('change', () => {
+    arrowsLayer.classList.toggle('hidden', !toggleArrows.checked);
+  });
+
+  // ── Hover sobre cartões ─────────────────────────────────────────────────────
+  const allCards = Array.from(document.querySelectorAll('.course-card'));
+  const allArrows = Array.from(document.querySelectorAll('.arrow-group'));
+
+  function getRelated(code) {
+    const prereqs = new Set();
+    const dependents = new Set();
+    for (const req of REQUIREMENTS) {
+      if (req.type === 'credit_requirement') continue;
+      if (req.to === code && req.from)   prereqs.add(req.from);
+      if (req.from === code)             dependents.add(req.to);
+    }
+    return { prereqs, dependents };
+  }
+
+  function onCardEnter(code) {
+    const { prereqs, dependents } = getRelated(code);
+    const related = new Set([code, ...prereqs, ...dependents]);
+
+    allCards.forEach(card => {
+      const c = card.dataset.code;
+      card.classList.toggle('highlighted', related.has(c));
+      card.classList.toggle('faded', !related.has(c));
+    });
+
+    // Remove hidden class so active arrows are always visible during hover
+    arrowsLayer.classList.remove('hidden');
+
+    allArrows.forEach(arrow => {
+      const from = arrow.dataset.from;
+      const to   = arrow.dataset.to;
+      const active = (from === code || to === code);
+      arrow.style.display = active ? '' : 'none';
+    });
+  }
+
+  function onCardLeave() {
+    allCards.forEach(card => {
+      card.classList.remove('highlighted', 'faded');
+    });
+    allArrows.forEach(arrow => {
+      arrow.style.display = '';
+    });
+    // Restore hidden state based on checkbox
+    arrowsLayer.classList.toggle('hidden', !toggleArrows.checked);
+  }
+
+  allCards.forEach(card => {
+    card.addEventListener('mouseenter', () => onCardEnter(card.dataset.code));
+    card.addEventListener('mouseleave', onCardLeave);
+    card.addEventListener('focusin',    () => onCardEnter(card.dataset.code));
+    card.addEventListener('focusout',   onCardLeave);
+  });
+
+  // ── Popup de detalhes ───────────────────────────────────────────────────────
+  const popup       = document.getElementById('course-popup');
+  const popupClose  = popup.querySelector('.popup-close');
+
+  function openPopup(code) {
+    const course = courseMap.get(code);
+    if (!course) return;
+
+    document.getElementById('popup-code').textContent    = course.code;
+    document.getElementById('popup-name').textContent    = course.name;
+    document.getElementById('popup-hours').textContent   = course.hours + ' h';
+    document.getElementById('popup-credits').textContent = course.credits + ' cr';
+    document.getElementById('popup-syllabus').textContent = course.syllabus;
+    document.getElementById('popup-tags').textContent    = course.tags.join(', ') || '—';
+
+    const prereqCodes = REQUIREMENTS
+      .filter(r => r.to === code && r.from)
+      .map(r => {
+        const prereqCourse = courseMap.get(r.from);
+        const label = prereqCourse ? r.from + ' – ' + prereqCourse.name : r.from;
+        return label + (r.description ? ' (' + r.description + ')' : '');
+      });
+    const creditReq = REQUIREMENTS.find(r => r.type === 'credit_requirement' && r.to === code);
+    if (creditReq) prereqCodes.push('mín. ' + creditReq.min_credits + ' CR cursados');
+
+    const prereqEl = document.getElementById('popup-prereqs');
+    prereqEl.innerHTML = '';
+    if (prereqCodes.length === 0) {
+      prereqEl.textContent = '—';
+    } else {
+      const ul = document.createElement('ul');
+      ul.style.cssText = 'list-style:none; padding:0; margin:0;';
+      prereqCodes.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = p;
+        ul.appendChild(li);
+      });
+      prereqEl.appendChild(ul);
+    }
+
+    popup.hidden = false;
+    popupClose.focus();
+  }
+
+  function closePopup() {
+    popup.hidden = true;
+  }
+
+  allCards.forEach(card => {
+    card.addEventListener('click', () => openPopup(card.dataset.code));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openPopup(card.dataset.code);
+      }
+    });
+  });
+
+  popupClose.addEventListener('click', closePopup);
+  popup.addEventListener('click', e => { if (e.target === popup) closePopup(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+})();
+</script>
+</body>
+</html>

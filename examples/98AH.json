@@ -1,0 +1,497 @@
+{
+  "curriculum": {
+    "code": "98AH",
+    "name": "Ciência de Dados e Inteligência Artificial",
+    "availableSince": "2022/1",
+    "description": "Matriz curricular do curso de Bacharelado em Ciência de Dados e Inteligência Artificial.",
+    "levels": 8
+  },
+
+  "courses": [
+    {
+      "code": "95303-04",
+      "name": "Matemática Discreta",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Estudo da lógica proposicional e técnicas básicas de demonstração. Estudo da álgebra de conjuntos. Estudo e discussão dos conceitos de relações, funções totais e parciais, relações de ordem parcial e total e relações de equivalência. Análise de definições indutivas, recursão e do princípio de indução. Introdução à álgebra Booleana.",
+      "tags": []
+    },
+    {
+      "code": "4611C-06",
+      "name": "Fundamentos de Programação",
+      "hours": 90,
+      "credits": 6,
+      "level": 1,
+      "syllabus": "Discussão sobre algoritmos como ferramenta para a descrição da solução de problemas e os fundamentos necessários para sua implementação usando linguagens de programação. Exame das noções de constantes, variáveis, tipos e expressões. Estudo de programas sequenciais, comandos de entrada e saída e o processo de compilação. Construção de programas com seleção, iterativos e uso do conceito de subprogramas. Estudo e uso de estruturas de dados usando arranjos e matrizes e conceitos básicos de classes e objetos.",
+      "tags": []
+    },
+    {
+      "code": "98705-02",
+      "name": "Introdução à Computação",
+      "hours": 30,
+      "credits": 2,
+      "level": 1,
+      "syllabus": "Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.",
+      "tags": []
+    },
+    {
+      "code": "95300-04",
+      "name": "Cálculo I",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Caracterização de funções de uma variável. Estudo do domínio e representação gráfica dessas funções. Análise de limites e continuidade. Definições e aplicações de derivadas diferenciais.",
+      "tags": []
+    },
+    {
+      "code": "98H03-04",
+      "name": "Introdução à Ciência de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 1,
+      "syllabus": "Visão geral sobre a Ciência de Dados: \"Big Data\" e Ciência de Dados; estado da arte: academia e indústria. Estudo de conceitos relacionados à Ciência de Dados: mentalidade orientada a dados, inferência estatística, análise de dados exploratória, o processo da ciência de dados, os processos de negócios x ciência de dados. Visão geral sobre algoritmos: regressão, similaridade, vizinhos, agrupamentos. Pensamento analítico: o que são bons modelos, visualização. Aplicações.",
+      "tags": []
+    },
+
+    {
+      "code": "4645G-04",
+      "name": "Algoritmos e Estruturas de Dados I",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados lineares e hierárquicas: listas, filas, pilhas e árvores. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Construção de algoritmos e implementações para problemas de ordenação e pesquisa. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.",
+      "tags": []
+    },
+    {
+      "code": "98H04-06",
+      "name": "Programação Orientada a Dados",
+      "hours": 90,
+      "credits": 6,
+      "level": 2,
+      "syllabus": "Configuração e gerenciamento de ambientes de programação orientada a dados. Ferramentas de controle de versionamento de código. Ambientes de prototipação, testes e debugging. Operadores e estruturas sintáticas para programação orientada a dados: variáveis, tipos, estruturas de dados, expressões, entrada e saída de dados, classes, operações em listas, funções lambda, operadores funcionais, expressões geradoras, aplicações parciais de funções. Bibliotecas de análise numérica e manipulação vetorial de dados. Bibliotecas de visualização de dados e geração de gráficos.",
+      "tags": []
+    },
+    {
+      "code": "95304-04",
+      "name": "Probabilidade e Estatística",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Organização, análise, interpretação de dados e estudo de modelos probabilísticas enfatizando o princípio da incerteza. Investigação da relação entre variáveis. Noções de amostragem visando à estimação de parâmetros e o estabelecimento de hipóteses estatísticas.",
+      "tags": []
+    },
+    {
+      "code": "95301-04",
+      "name": "Cálculo II",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Continuação de Cálculo I, abordando integração avançada, séries, equações diferenciais e aplicações.",
+      "tags": []
+    },
+    {
+      "code": "98800-04",
+      "name": "Fundamentos de Sistemas Computacionais",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Estudo dos sistemas de numeração. Introdução a um sistema computacional básico: entrada e saída, unidade de processamento e memória. Apresentação da relação software-hardware: conceito de operação com o processador, linguagem de montagem, compiladores, montadores, ligadores e carregadores. Estudo de circuitos combinacionais e otimização de representações Booleanas: portas lógicas e formas algébricas. Exploração de problemas básicos: definição de caminho crítico e tipos de conflitos em processadores pipeline. Apresentação dos princípios e padrões subjacentes a sistemas de entrada e saída em sistemas computacionais. Estudo de conceitos relativos à hierarquia de memória, com foco no papel da memória cache. Estudo de conceitos básicos de multiprocessamento. Avaliação de desempenho de arquiteturas de computadores.",
+      "tags": []
+    },
+
+    {
+      "code": "4611E-04",
+      "name": "Lógica para Computação",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.",
+      "tags": []
+    },
+    {
+      "code": "98901-04",
+      "name": "Banco de Dados I",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Entendimento da arquitetura típica de um banco de dados. Estudo sobre modelos de dados: clássicos, relacional e pós-relacionais. Compreensão dos diferentes formalismos para modelagem conceitual. Solução de projetos de bancos de dados pelo uso de dependências funcionais, formas normais e de restrições de integridade. Solução de implementação de bancos de dados: modelo lógico e físico, e mapeamento do modelo conceitual para o de implementação.",
+      "tags": []
+    },
+    {
+      "code": "98H01-04",
+      "name": "Coleta, Preparação e Análise de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Visão geral sobre sistemas de suporte à decisão baseados em dados. Introdução e unificação de ciência de dados e inteligência de negócio. Introdução à coleta de dados na web. Compreensão sobre o processo de KDD como mecanismo para coleta, armazenamento e gestão de dados. Compreensão de diferentes técnicas e algoritmos para preparação de dados. Compreensão de diversas técnicas de análise de dados.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98F29-04",
+      "name": "Inferência Comparada",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Inferência Estatística. Os paradigmas Clássico e Bayesiano. Princípios. Independência e permutabilidade. Representação da informação a priori. (Função de) Verossimilhança. Operação bayesiana. Distribuição a posteriori. Métodos de aproximação integral. Estimação. Funções utilidade e perda. Modelos.",
+      "tags": []
+    },
+    {
+      "code": "98F33-04",
+      "name": "Álgebra Linear e Matricial",
+      "hours": 60,
+      "credits": 4,
+      "level": 3,
+      "syllabus": "Estudo de matrizes e discussão de sistemas lineares. Estudo de espaços vetoriais euclidianos de dimensão finita. Ortogonalização e o método dos mínimos quadrados. Estudo de autovalores e autovetores de matrizes e suas aplicações. Diagonalização e demais decomposições de matrizes.",
+      "tags": []
+    },
+
+    {
+      "code": "4645H-04",
+      "name": "Algoritmos e Estruturas de Dados II",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.",
+      "tags": []
+    },
+    {
+      "code": "98708-04",
+      "name": "Inteligência Artificial",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos. Introdução ao Aprendizado de Máquina com ênfase em Aprendizado por reforço.",
+      "tags": []
+    },
+    {
+      "code": "98902-02",
+      "name": "Banco de Dados II",
+      "hours": 30,
+      "credits": 2,
+      "level": 4,
+      "syllabus": "Visão geral das principais formas de uso de bancos de dados: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Visão geral da definição de dados na abordagem relacional, em modelos OLAP, bem como nas abordagens sem esquemas prévios (NoSQL). Estudo sobre linguagens de definição e manipulação de banco de dados e, em especial, SQL. Definição e consultas de dados nas principais formas de uso de bancos de dados, com entendimento dos principais fatores envolvidos com desempenho.",
+      "tags": []
+    },
+    {
+      "code": "98H05-04",
+      "name": "Aprendizado Supervisionado",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Introdução ao aprendizado supervisionado. Compreensão dos paradigmas de aprendizado supervisionado e seus respectivos algoritmos: aprendizado baseado em instâncias (ex: K-NN), aprendizado baseado em procura (ex: indução de árvores e regras), aprendizado probabilístico (ex: Redes Bayesianas), aprendizado baseado em otimização (ex: Redes Neurais e SVMs), aprendizado de comitês supervisionados (ex: Bagging, Boosting, Random Forests). Compreensão das principais medidas e protocolos para avaliação de modelos supervisionados. Apresentação de tópicos avançados em aprendizado supervisionado. Apresentação de aplicações de aprendizado supervisionado.",
+      "tags": []
+    },
+    {
+      "code": "98F30-04",
+      "name": "Análise Multivariada",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Tópicos em Álgebra Linear. Vetores e matrizes aleatórios. Distribuições normal multivariada, Gama, Dirichlet, F de Snedecor e Wishart. Regressão multivariada. Análise de Componentes Principais. Modelagem de variáveis latentes, EFA e CFA. Correlação canônica. Análise de agrupamento.",
+      "tags": []
+    },
+    {
+      "code": "4117D-04",
+      "name": "Cálculo III",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Caracterização das funções de várias variáveis. Estudo de domínio e representação gráfica de funções de duas variáveis. Definições e aplicações de derivadas parciais, derivadas direcionais e diferenciais. Resolução de problemas de otimização de funções de duas e três variáveis. Definição e aplicações das integrais duplas e triplas. Apresentação das equações diferenciais ordinárias (EDO) e sua classificação. Resolução de problemas que envolvem EDO.",
+      "tags": []
+    },
+    {
+      "code": "98713-04",
+      "name": "Fundamentos de Processamento Paralelo e Distribuído",
+      "hours": 60,
+      "credits": 4,
+      "level": 4,
+      "syllabus": "Introdução à computação concorrente e sua representação com sistemas de transição de estados. Estudo de processos e threads. Estudo sobre memória compartilhada e passagem de mensagem. Descrição da semântica de mecanismos de sincronização e seu uso na programação concorrente. Apresentação de abordagens para modelagem e avaliação de propriedades de sistemas concorrentes. Apresentação dos objetivos e pressupostos ambientais para sistemas paralelos e para sistemas distribuídos. Análise das abordagens para modelagem de aplicações paralelas com memória compartilhada e passagem de mensagem. Estudo das principais abstrações para programação distribuída. Apresentação de estudos de caso de sistemas paralelos e de sistemas distribuídos.",
+      "tags": []
+    },
+
+    {
+      "code": "4646Z-04",
+      "name": "Projeto e Otimização de Algoritmos",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Estudo teórico e prático das principais técnicas para o projeto de algoritmos, como algoritmos gulosos, divisão e conquista, programação dinâmica, backtracking, branch and bound e algoritmos aproximativos como algoritmos genéticos, gradiente descendente e outros.",
+      "tags": []
+    },
+    {
+      "code": "98H00-04",
+      "name": "Infraestrutura para Gestão de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Visão geral de sistemas de bancos de dados, suas principais funcionalidades e formas de uso: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Entendimento dos modelos de transações de bancos de dados, de gerência de memória principal e secundária, de controle de concorrência e de recuperação após falhas. Estudo sobre a otimização de consultas e de transações em bancos de dados. Visão geral sobre a gestão de bancos de dados sem esquemas prévios.",
+      "tags": []
+    },
+    {
+      "code": "98H07-04",
+      "name": "Visualização de Dados",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Introdução à área de visualização de dados e suas aplicações. Visualização de informações, visualização científica e análise visual. Percepção, tipos de dados, representações visuais e princípios de interação. Estratégias para comunicação de resultados através de visualização.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98H06-02",
+      "name": "Projeto em Ciência de Dados I",
+      "hours": 30,
+      "credits": 2,
+      "level": 5,
+      "syllabus": "Aplicação das competências construídas durante os semestres anteriores de forma integrada, através da identificação de uma oportunidade de projeto em ciência de dados, e da modelagem e implementação do mesmo. Uso de dinâmicas de interação para compartilhamento de lições aprendidas nos projetos desenvolvidos.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98F31-04",
+      "name": "Tópicos de Álgebra Linear",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Espaços vetoriais de dimensão infinita. Espaços com produto interno. Séries de Fourier. Transformações lineares. Aplicações da Álgebra Linear.",
+      "tags": []
+    },
+    {
+      "code": "98700-04",
+      "name": "Sistemas Operacionais",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Apresentação da organização básica de sistemas operacionais. Estudo da evolução da estrutura e funcionamento dos sistemas operacionais. Apresentação do conceito de processos e de mecanismos de sincronização entre processos que compartilham memória e sua implementação em um sistema operacional. Exemplos práticos de criação e sincronização de processos. Introdução e exploração do conceito de algoritmos de escalonamento. Estudo da comunicação inter-processos. Análise e discussão de problemas relacionados à \"deadlock\" e à comunicação entre processos. Estudo sobre gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos. Análise e discussão de problemas relacionados ao gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos.",
+      "tags": []
+    },
+    {
+      "code": "98721-04",
+      "name": "Introdução à Visão Computacional",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Introdução dos conceitos e ideias fundamentais de Processamento de Imagens e Visão Computacional. Apresentação de conceitos de imagens e cores. Apresentação de operações e transformações em imagens: realce, histogramas, filtragem e convolução. Discussão de métodos de segmentação e descritores de imagens. Compreensão de modelos de câmeras e visão estéreo. Apresentação de aplicações de Visão Computacional e Processamento de Imagens.",
+      "tags": []
+    },
+
+    {
+      "code": "98801-04",
+      "name": "Engenharia de Software I",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Princípios e metodologias para desenvolvimento de software, incluindo requisitos e design.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "46515-04",
+      "name": "Linguagens, Autômatos e Computação",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Introdução às linguagens formais: definições, propriedades e operações. Estudo de linguagens na hierarquia de Chomsky: regulares, livres de contexto, sensíveis ao contexto, enumeráveis recursivamente. Estudo de máquinas como reconhecedores de linguagens: autômatos finitos, autômatos de pilha e máquinas de Turing. Estudo teórico prático de expressões regulares. Introdução ao conceito de computabilidade.",
+      "tags": []
+    },
+    {
+      "code": "98H11-02",
+      "name": "Sistemas de Recomendação",
+      "hours": 30,
+      "credits": 2,
+      "level": 6,
+      "syllabus": "Introdução a sistemas de recomendação. Paradigmas de sistemas de recomendação: métodos colaborativos e baseados em conteúdo. Recomendação não personalizada: estatísticas de sumarização e associação de produtos, baseada em estereótipos ou demografia, e filtros baseados em conteúdo. Recomendação personalizada por vizinhos mais próximos: recomendação por filtro colaborativo usuário-usuário e por filtro item-item. Recomendações personalizadas baseadas nos escores de produtos pelo usuário. Avaliação de sistemas de recomendação: acurácia de predição, acurácia de ranqueamento, diversidade, cobertura e acaso favorável. Mapeamento de métricas de avaliação a objetivos do usuário e do negócio.",
+      "tags": []
+    },
+    {
+      "code": "98H08-04",
+      "name": "Aprendizado Não Supervisionado",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Introdução ao aprendizado não supervisionado. Paradigmas de agrupamento de dados: algoritmos particionais (com e sem sobreposição), hierárquicos, baseados em densidade e baseados em sub-espaços. Medidas de validação de agrupamento de dados. Algoritmos para aprendizado de itens frequentes. Medidas de avaliação de aprendizado de itens frequentes. Algoritmos de redução de dimensionalidade. Introdução a modelos geradores. Tópicos avançados de aprendizado não supervisionado. Aplicações de aprendizado não supervisionado.",
+      "tags": []
+    },
+    {
+      "code": "98H10-04",
+      "name": "Introdução ao Processamento de Linguagem Natural",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Introdução dos conceitos e ideias fundamentais em Processamento de Linguagem Natural (PLN). Compreensão das etapas de desenvolvimento de soluções baseadas em PLN, da construção de corpus à implementação e avaliação de resultados. Entendimento de métodos e técnicas para processamento de textos em nível léxico, sintático e semântico. Apresentação das principais tarefas da área.",
+      "tags": []
+    },
+    {
+      "code": "98H09-04",
+      "name": "Aprendizado Profundo I",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Conceito de Aprendizado Profundo. Redes neurais profundas como estratégia para aprendizado automático de representações (features). Apresentação detalhada de algoritmos de treinamento de redes neurais profundas. Discussão sobre os principais desafios no projeto, na otimização de hiperparâmetros e na avaliação de redes neurais profundas. Apresentação e prototipação de diversas arquiteturas de redes neurais profundas para tarefas que envolvem dados não estruturados.",
+      "tags": []
+    },
+    {
+      "code": "98709-04",
+      "name": "Fundamentos de Redes de Computadores",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Estudo dos Modelos de referência de interconexão de computadores OSI/ISO e da Arquitetura Internet, apresentando em mais detalhamento os Níveis de Rede, Transporte e Aplicação, com seus conceitos, funções e protocolos. Estudo e análise do impacto das funções dos protocolos de comunicação no desenvolvimento e desempenho das aplicações.",
+      "tags": []
+    },
+
+    {
+      "code": "1501A-04",
+      "name": "Ética e Cidadania",
+      "hours": 60,
+      "credits": 4,
+      "level": 7,
+      "syllabus": "Abordagem de problemas e conceitos filosóficos relacionados à moralidade e ao exercício da cidadania. Introdução aos principais temas e problemas de Ética, presentes na História da Filosofia. Reflexão filosófica sobre o ideal democrático, a cidadania e os direitos humanos.",
+      "tags": ["online"]
+    },
+    {
+      "code": "98H12-04",
+      "name": "Aprendizado por Reforço",
+      "hours": 60,
+      "credits": 4,
+      "level": 7,
+      "syllabus": "Estudo da teoria e pressuposições por trás de algoritmos de aprendizado por reforço. Teoria da Decisão, Processos de Decisão Markovianos, e resolução por programação dinâmica. Aprendizado por diferença temporal. Aproximação de funções valor. Gradiente de política. Planejamento e aprendizado. Exploração e aproveitamento. Aplicações de aprendizado por reforço.",
+      "tags": []
+    },
+    {
+      "code": "98H14-02",
+      "name": "Projeto em Ciência de Dados II",
+      "hours": 30,
+      "credits": 2,
+      "level": 7,
+      "syllabus": "Aplicação das competências construídas durante os semestres anteriores de forma integrada, através da identificação de uma oportunidade de projeto em ciência de dados, e da modelagem e implementação do mesmo. Uso de dinâmicas de interação para compartilhamento de lições aprendidas nos projetos desenvolvidos.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98H13-04",
+      "name": "Aprendizado Profundo II",
+      "hours": 60,
+      "credits": 4,
+      "level": 7,
+      "syllabus": "Introdução ao desenvolvimento de redes neurais profundas usando frameworks. Apresentação em detalhes de técnicas de implementação e padrões de projeto para desenvolvimento de redes neurais. Experimentação prática com modelos multimodais. Discussão sobre comunidades de software livre para desenvolvimento de redes neurais. Apresentação dos conceitos de viés e equidade em modelos de aprendizado profundo.",
+      "tags": []
+    },
+    {
+      "code": "98802-02",
+      "name": "Engenharia de Software II",
+      "hours": 30,
+      "credits": 2,
+      "level": 7,
+      "syllabus": "Técnicas avançadas de engenharia de software, incluindo testes, manutenção e qualidade.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "4636N-04",
+      "name": "Infraestrutura de Tecnologia da Informação",
+      "hours": 60,
+      "credits": 4,
+      "level": 7,
+      "syllabus": "Apresentação dos componentes que formam uma infraestrutura de Tecnologia de Informação (TI) e suas funções. Estudo dos principais pontos relacionados à infraestrutura de TI nos modelos de gestão de TI. Análise do uso de técnicas de virtualização. Apresentação dos principais dispositivos para processamento, comunicação e armazenamento. Estudo das características da infraestrutura em ambientes de computação em nuvem. Apresentação do conceito de Green IT. Avaliação de estudos de casos de infraestrutura de TI.",
+      "tags": []
+    },
+
+    {
+      "code": "11521-04",
+      "name": "Humanismo e Cultura Religiosa",
+      "hours": 60,
+      "credits": 4,
+      "level": 8,
+      "syllabus": "A condição humana aberta ao transcendente; Fé cristã e cultura atual; O estudo do fenômeno religioso em suas diferentes Tradições; Elementos da cultura e da religiosidade afro-brasileira e indígena; A relação entre fé e razão, e ciência e religião; Motivação para ações comunitárias, como engajamento consequente de uma consciência social e da fé cristã.",
+      "tags": ["online"]
+    },
+    {
+      "code": "254CF-02",
+      "name": "Formação do Empreendedor",
+      "hours": 30,
+      "credits": 2,
+      "level": 8,
+      "syllabus": "Compreensão dos conceitos: empreendedorismo e empreendedor, empreendimento e empresa. Análise do contexto do empreendedorismo e da inovação. Caracterização do perfil empreendedor: motivação e liderança. Visão sobre a prática empreendedora e as ferramentas úteis ao empreendedor. Modelagem de Negócios e Plano de Negócios: estudo das suas etapas, processos e elaboração. Perspectivas do Empreendedorismo no Brasil.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98H15-02",
+      "name": "Projeto em Ciência de Dados III",
+      "hours": 30,
+      "credits": 2,
+      "level": 8,
+      "syllabus": "Aplicação das competências construídas durante os semestres anteriores de forma integrada, através da identificação de uma oportunidade de projeto em ciência de dados, e da modelagem e implementação do mesmo. Uso de dinâmicas de interação para compartilhamento de lições aprendidas nos projetos desenvolvidos.",
+      "tags": ["extensionista"]
+    },
+    {
+      "code": "98F32-04",
+      "name": "Previsão de Séries Temporais",
+      "hours": 60,
+      "credits": 4,
+      "level": 8,
+      "syllabus": "Fundamentos sobre previsão. Gráficos de séries temporais. Decomposição da série temporal. Autocorrelação e autocorrelação parcial. Suavização exponencial. Modelos ARIMA e GARCH. Séries temporais hierárquicas e agrupadas. Métodos avançados de previsão. Testes de quebra estrutural.",
+      "tags": []
+    }
+  ],
+
+  "requirements": [
+    { "type": "prerequisite", "from": "4611C-06", "to": "4645G-04" },
+    { "type": "prerequisite", "from": "4611C-06", "to": "98H04-06" },
+    { "type": "prerequisite", "from": "98H03-04", "to": "98H04-06" },
+    { "type": "prerequisite", "from": "95300-04", "to": "95301-04" },
+    { "type": "prerequisite", "from": "95300-04", "to": "95304-04" },
+
+    { "type": "prerequisite", "from": "95304-04", "to": "98F29-04" },
+    { "type": "prerequisite", "from": "98H04-06", "to": "98H01-04" },
+    { "type": "prerequisite", "from": "98H03-04", "to": "98901-04" },
+    { "type": "prerequisite", "from": "95303-04", "to": "4611E-04" },
+
+    { "type": "prerequisite", "from": "4645G-04", "to": "4645H-04" },
+    { "type": "prerequisite", "from": "4611E-04", "to": "98708-04" },
+    { "type": "prerequisite", "from": "98901-04", "to": "98902-02" },
+    { "type": "prerequisite", "from": "98F29-04", "to": "98H05-04" },
+    { "type": "prerequisite", "from": "98F33-04", "to": "98H05-04" },
+    { "type": "prerequisite", "from": "95304-04", "to": "98F30-04" },
+    { "type": "prerequisite", "from": "98F33-04", "to": "98F30-04" },
+    { "type": "prerequisite", "from": "95301-04", "to": "4117D-04" },
+    { "type": "prerequisite", "from": "98H04-06", "to": "98713-04" },
+
+    { "type": "prerequisite", "from": "4645H-04", "to": "4646Z-04" },
+    { "type": "prerequisite", "from": "98902-02", "to": "98H00-04" },
+    { "type": "prerequisite", "from": "98H01-04", "to": "98H06-02" },
+    { "type": "prerequisite", "from": "98H01-04", "to": "98H07-04" },
+    { "type": "prerequisite", "from": "98F33-04", "to": "98F31-04" },
+    { "type": "prerequisite", "from": "4117D-04", "to": "98F31-04" },
+
+    { "type": "prerequisite", "from": "98700-04", "to": "98709-04" },
+    { "type": "prerequisite", "from": "98H05-04", "to": "98H09-04" },
+    { "type": "prerequisite", "from": "98F30-04", "to": "98H09-04" },
+    { "type": "prerequisite", "from": "98F31-04", "to": "98H09-04" },
+    { "type": "prerequisite", "from": "98H05-04", "to": "98H08-04" },
+    { "type": "prerequisite", "from": "98708-04", "to": "98H11-02" },
+
+    { "type": "prerequisite", "from": "98709-04", "to": "4636N-04" },
+    { "type": "prerequisite", "from": "98801-04", "to": "98802-02" },
+    { "type": "prerequisite", "from": "98H09-04", "to": "98H13-04" },
+    { "type": "prerequisite", "from": "98H06-02", "to": "98H14-02" },
+    { "type": "prerequisite", "from": "98708-04", "to": "98H12-04" },
+
+    { "type": "prerequisite", "from": "95304-04", "to": "98F32-04" },
+    { "type": "prerequisite", "from": "98H14-02", "to": "98H15-02" },
+    { "type": "prerequisite", "from": "98H07-04", "to": "98H15-02" },
+
+    { "type": "special", "from": "98705-02", "to": "98800-04" },
+    { "type": "special", "from": "98713-04", "to": "98700-04" },
+    { "type": "special", "from": "98800-04", "to": "98700-04" },
+    { "type": "special", "from": "98H05-04", "to": "98H06-02" },
+    { "type": "special", "from": "98902-02", "to": "98H00-04" },
+    { "type": "special", "from": "98721-04", "to": "98H09-04" },
+    { "type": "special", "from": "95303-04", "to": "46515-04" },
+    { "type": "special", "from": "98H10-04", "to": "98H13-04" },
+    { "type": "special", "from": "98H00-04", "to": "98H14-02" },
+    { "type": "special", "from": "98H08-04", "to": "98H14-02" },
+
+    { "type": "credit_requirement", "to": "98721-04", "min_credits": 60 },
+    { "type": "credit_requirement", "to": "98801-04", "min_credits": 90 },
+    { "type": "credit_requirement", "to": "1501A-04", "min_credits": 60 },
+    { "type": "credit_requirement", "to": "11521-04", "min_credits": 60 },
+    { "type": "credit_requirement", "to": "254CF-02", "min_credits": 60 }
+  ]
+}

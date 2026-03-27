@@ -1,0 +1,18 @@
+{
+  "name": "mci",
+  "version": "1.0.0",
+  "description": "Utilitário CLI para geração de Matriz Curricular Interativa",
+  "author": "Prof. Daniel Callegari",
+  "license": "MIT",
+  "main": "dist/mci.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "node -e \"['dist','node_modules','package-lock.json'].forEach(p=>require('fs').rmSync(p,{recursive:true,force:true}))\"",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "typescript": "^5.5.0"
+  }
+}
