@@ -27,12 +27,12 @@
       "tags": []
     },
     {
-      "code": "98705-02",
-      "name": "Introdução à Computação",
-      "hours": 30,
-      "credits": 2,
+      "code": "98H03-04",
+      "name": "Introdução à Ciência de Dados",
+      "hours": 60,
+      "credits": 4,
       "level": 1,
-      "syllabus": "Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.",
+      "syllabus": "Visão geral sobre a Ciência de Dados: \"Big Data\" e Ciência de Dados; estado da arte: academia e indústria. Estudo de conceitos relacionados à Ciência de Dados: mentalidade orientada a dados, inferência estatística, análise de dados exploratória, o processo da ciência de dados, os processos de negócios x ciência de dados. Visão geral sobre algoritmos: regressão, similaridade, vizinhos, agrupamentos. Pensamento analítico: o que são bons modelos, visualização. Aplicações.",
       "tags": []
     },
     {
@@ -45,14 +45,15 @@
       "tags": []
     },
     {
-      "code": "98H03-04",
-      "name": "Introdução à Ciência de Dados",
-      "hours": 60,
-      "credits": 4,
+      "code": "98705-02",
+      "name": "Introdução à Computação",
+      "hours": 30,
+      "credits": 2,
       "level": 1,
-      "syllabus": "Visão geral sobre a Ciência de Dados: \"Big Data\" e Ciência de Dados; estado da arte: academia e indústria. Estudo de conceitos relacionados à Ciência de Dados: mentalidade orientada a dados, inferência estatística, análise de dados exploratória, o processo da ciência de dados, os processos de negócios x ciência de dados. Visão geral sobre algoritmos: regressão, similaridade, vizinhos, agrupamentos. Pensamento analítico: o que são bons modelos, visualização. Aplicações.",
+      "syllabus": "Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.",
       "tags": []
     },
+
 
     {
       "code": "4645G-04",
@@ -61,6 +62,15 @@
       "credits": 4,
       "level": 2,
       "syllabus": "Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados lineares e hierárquicas: listas, filas, pilhas e árvores. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Construção de algoritmos e implementações para problemas de ordenação e pesquisa. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.",
+      "tags": []
+    },
+    {
+      "code": "4611E-04",
+      "name": "Lógica para Computação",
+      "hours": 60,
+      "credits": 4,
+      "level": 2,
+      "syllabus": "Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.",
       "tags": []
     },
     {
@@ -99,14 +109,23 @@
       "syllabus": "Estudo dos sistemas de numeração. Introdução a um sistema computacional básico: entrada e saída, unidade de processamento e memória. Apresentação da relação software-hardware: conceito de operação com o processador, linguagem de montagem, compiladores, montadores, ligadores e carregadores. Estudo de circuitos combinacionais e otimização de representações Booleanas: portas lógicas e formas algébricas. Exploração de problemas básicos: definição de caminho crítico e tipos de conflitos em processadores pipeline. Apresentação dos princípios e padrões subjacentes a sistemas de entrada e saída em sistemas computacionais. Estudo de conceitos relativos à hierarquia de memória, com foco no papel da memória cache. Estudo de conceitos básicos de multiprocessamento. Avaliação de desempenho de arquiteturas de computadores.",
       "tags": []
     },
+    {
+      "code": "980E8-24",
+      "name": "Disciplinas Eletivas",
+      "hours": 360,
+      "credits": 24,
+      "level": 2,
+      "syllabus": "Disciplinas eletivas a serem escolhidas pelo estudante, de acordo com seus interesses e objetivos de formação. As disciplinas eletivas podem ser escolhidas entre as disciplinas ofertadas pela Universidade, respeitando os pré-requisitos estabelecidos para cada disciplina. O aluno deve completar 24 créditos em disciplinas eletivas.",
+      "tags": ["eletivas"]
+    },
 
     {
-      "code": "4611E-04",
-      "name": "Lógica para Computação",
+      "code": "4645H-04",
+      "name": "Algoritmos e Estruturas de Dados II",
       "hours": 60,
       "credits": 4,
       "level": 3,
-      "syllabus": "Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.",
+      "syllabus": "Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.",
       "tags": []
     },
     {
@@ -146,15 +165,7 @@
       "tags": []
     },
 
-    {
-      "code": "4645H-04",
-      "name": "Algoritmos e Estruturas de Dados II",
-      "hours": 60,
-      "credits": 4,
-      "level": 4,
-      "syllabus": "Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.",
-      "tags": []
-    },
+    
     {
       "code": "98708-04",
       "name": "Inteligência Artificial",
@@ -247,6 +258,15 @@
       "tags": ["extensionista"]
     },
     {
+      "code": "98721-04",
+      "name": "Introdução à Visão Computacional",
+      "hours": 60,
+      "credits": 4,
+      "level": 5,
+      "syllabus": "Introdução dos conceitos e ideias fundamentais de Processamento de Imagens e Visão Computacional. Apresentação de conceitos de imagens e cores. Apresentação de operações e transformações em imagens: realce, histogramas, filtragem e convolução. Discussão de métodos de segmentação e descritores de imagens. Compreensão de modelos de câmeras e visão estéreo. Apresentação de aplicações de Visão Computacional e Processamento de Imagens.",
+      "tags": []
+    },
+    {
       "code": "98F31-04",
       "name": "Tópicos de Álgebra Linear",
       "hours": 60,
@@ -264,25 +284,7 @@
       "syllabus": "Apresentação da organização básica de sistemas operacionais. Estudo da evolução da estrutura e funcionamento dos sistemas operacionais. Apresentação do conceito de processos e de mecanismos de sincronização entre processos que compartilham memória e sua implementação em um sistema operacional. Exemplos práticos de criação e sincronização de processos. Introdução e exploração do conceito de algoritmos de escalonamento. Estudo da comunicação inter-processos. Análise e discussão de problemas relacionados à \"deadlock\" e à comunicação entre processos. Estudo sobre gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos. Análise e discussão de problemas relacionados ao gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos.",
       "tags": []
     },
-    {
-      "code": "98721-04",
-      "name": "Introdução à Visão Computacional",
-      "hours": 60,
-      "credits": 4,
-      "level": 5,
-      "syllabus": "Introdução dos conceitos e ideias fundamentais de Processamento de Imagens e Visão Computacional. Apresentação de conceitos de imagens e cores. Apresentação de operações e transformações em imagens: realce, histogramas, filtragem e convolução. Discussão de métodos de segmentação e descritores de imagens. Compreensão de modelos de câmeras e visão estéreo. Apresentação de aplicações de Visão Computacional e Processamento de Imagens.",
-      "tags": []
-    },
 
-    {
-      "code": "98801-04",
-      "name": "Engenharia de Software I",
-      "hours": 60,
-      "credits": 4,
-      "level": 6,
-      "syllabus": "Princípios e metodologias para desenvolvimento de software, incluindo requisitos e design.",
-      "tags": ["extensionista"]
-    },
     {
       "code": "46515-04",
       "name": "Linguagens, Autômatos e Computação",
@@ -327,6 +329,15 @@
       "level": 6,
       "syllabus": "Conceito de Aprendizado Profundo. Redes neurais profundas como estratégia para aprendizado automático de representações (features). Apresentação detalhada de algoritmos de treinamento de redes neurais profundas. Discussão sobre os principais desafios no projeto, na otimização de hiperparâmetros e na avaliação de redes neurais profundas. Apresentação e prototipação de diversas arquiteturas de redes neurais profundas para tarefas que envolvem dados não estruturados.",
       "tags": []
+    },
+    {
+      "code": "98801-04",
+      "name": "Engenharia de Software I",
+      "hours": 60,
+      "credits": 4,
+      "level": 6,
+      "syllabus": "Princípios e metodologias para desenvolvimento de software, incluindo requisitos e design.",
+      "tags": ["extensionista"]
     },
     {
       "code": "98709-04",

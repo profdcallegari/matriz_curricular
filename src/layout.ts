@@ -22,8 +22,7 @@ export function computeLayout(data: CurriculumFile): LayoutData {
 
   for (let level = 1; level <= curriculum.levels; level++) {
     const levelCourses = courses
-      .filter(c => c.level === level)
-      .sort((a, b) => a.code.localeCompare(b.code));
+      .filter(c => c.level === level);
 
     const totalCredits = levelCourses.reduce((sum, c) => sum + c.credits, 0);
 
