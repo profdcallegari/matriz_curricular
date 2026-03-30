@@ -211,42 +211,168 @@
     .popup {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.5);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
+      padding: 16px;
+      animation: popup-backdrop-in 0.18s ease;
     }
     .popup[hidden] { display: none; }
+    @keyframes popup-backdrop-in {
+      from { background: rgba(0,0,0,0); }
+      to   { background: rgba(0,0,0,0.5); }
+    }
     .popup-content {
       background: #fff;
-      border-radius: 8px;
-      padding: 24px;
-      max-width: 480px;
-      width: 90%;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
       position: relative;
-      max-height: 80vh;
+      max-height: 88vh;
       overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+      animation: popup-slide-in 0.18s ease;
+    }
+    @keyframes popup-slide-in {
+      from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
     }
     .popup-close {
       position: absolute;
-      top: 12px; right: 16px;
-      font-size: 1.4rem;
-      background: none;
+      top: 12px; right: 12px;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.18);
       border: none;
+      border-radius: 50%;
       cursor: pointer;
-      color: #555;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      transition: background 0.15s;
     }
-    .popup-header { margin-bottom: 12px; }
-    .popup-code   { font-size: 0.8rem; color: #888; }
-    .popup-name   { font-size: 1.1rem; margin-top: 2px; }
-    .popup-details {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 6px 12px;
-      font-size: 0.85rem;
+    .popup-close:hover { background: rgba(255,255,255,0.32); }
+    .popup-close svg   { width: 15px; height: 15px; }
+    .popup-header {
+      background: #1a3a6b;
+      color: #fff;
+      padding: 22px 52px 18px 22px;
+      border-radius: 12px 12px 0 0;
     }
-    .popup-details dt { font-weight: 600; color: #555; }
+    .popup-code {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+    .popup-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .popup-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .popup-header .tag {
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .popup-body {
+      padding: 18px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .popup-stats {
+      display: flex;
+      gap: 10px;
+    }
+    .popup-stat {
+      flex: 1;
+      background: #f2f5fb;
+      border: 1px solid #dde3f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .popup-stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a3a6b;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .popup-stat-label {
+      font-size: 0.7rem;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .popup-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #1a3a6b;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #e8ecf5;
+    }
+    .popup-syllabus-text {
+      font-size: 0.84rem;
+      color: #444;
+      line-height: 1.65;
+    }
+    .popup-req-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .popup-req-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #333;
+    }
+    .popup-req-item::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #1a3a6b;
+      flex-shrink: 0;
+      position: relative;
+      top: -1px;
+    }
+    .popup-req-code {
+      font-weight: 700;
+      color: #1a3a6b;
+      font-size: 0.77rem;
+      white-space: nowrap;
+    }
+    .popup-req-name   { color: #555; }
+    .popup-empty {
+      font-size: 0.82rem;
+      color: #aaa;
+      font-style: italic;
+    }
 
     /* Totalizador de créditos */
     .credits-summary {
@@ -1563,18 +1689,40 @@
 </div>
 <div id="course-popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-name" hidden>
   <div class="popup-content">
-    <button class="popup-close" aria-label="Fechar">&times;</button>
+    <button class="popup-close" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
     <div class="popup-header">
       <span id="popup-code" class="popup-code"></span>
       <h2 id="popup-name" class="popup-name"></h2>
+      <div id="popup-tags" class="popup-tags"></div>
     </div>
-    <dl class="popup-details">
-      <dt>Carga horária</dt><dd id="popup-hours"></dd>
-      <dt>Créditos</dt><dd id="popup-credits"></dd>
-      <dt>Ementa</dt><dd id="popup-syllabus"></dd>
-      <dt>Tags</dt><dd id="popup-tags"></dd>
-      <dt>Pré-requisitos</dt><dd id="popup-prereqs"></dd>
-    </dl>
+    <div class="popup-body">
+      <div class="popup-stats">
+        <div class="popup-stat">
+          <span class="popup-stat-value" id="popup-hours"></span>
+          <span class="popup-stat-label">Carga horária</span>
+        </div>
+        <div class="popup-stat">
+          <span class="popup-stat-value" id="popup-credits"></span>
+          <span class="popup-stat-label">Créditos</span>
+        </div>
+      </div>
+      <section class="popup-section">
+        <h3 class="popup-section-title">Ementa</h3>
+        <p id="popup-syllabus" class="popup-syllabus-text"></p>
+      </section>
+      <section class="popup-section">
+        <h3 class="popup-section-title">Pré-requisitos</h3>
+        <div id="popup-prereqs"></div>
+      </section>
+      <section class="popup-section">
+        <h3 class="popup-section-title">Dependentes</h3>
+        <div id="popup-dependents"></div>
+      </section>
+    </div>
   </div>
 </div>
 <script>
@@ -1659,36 +1807,98 @@
     const course = courseMap.get(code);
     if (!course) return;
 
-    document.getElementById('popup-code').textContent    = course.code;
-    document.getElementById('popup-name').textContent    = course.name;
-    document.getElementById('popup-hours').textContent   = course.hours + ' h';
-    document.getElementById('popup-credits').textContent = course.credits + ' cr';
-    document.getElementById('popup-syllabus').textContent = course.syllabus;
-    document.getElementById('popup-tags').textContent    = course.tags.join(', ') || '—';
+    document.getElementById('popup-code').textContent     = course.code;
+    document.getElementById('popup-name').textContent     = course.name;
+    document.getElementById('popup-hours').textContent    = course.hours + ' h';
+    document.getElementById('popup-credits').textContent  = course.credits + ' cr';
+    document.getElementById('popup-syllabus').textContent = course.syllabus || '—';
 
-    const prereqCodes = REQUIREMENTS
-      .filter(r => r.to === code && r.from)
-      .map(r => {
-        const prereqCourse = courseMap.get(r.from);
-        const label = prereqCourse ? r.from + ' – ' + prereqCourse.name : r.from;
-        return label + (r.description ? ' (' + r.description + ')' : '');
+    // Tags como badges
+    const tagsEl = document.getElementById('popup-tags');
+    tagsEl.innerHTML = '';
+    course.tags.forEach(function(tag) {
+      const span = document.createElement('span');
+      span.className = 'tag tag-' + tag;
+      span.textContent = tag;
+      tagsEl.appendChild(span);
+    });
+
+    // Pré-requisitos
+    const prereqs = REQUIREMENTS
+      .filter(function(r) { return r.to === code && r.from; })
+      .map(function(r) {
+        const c = courseMap.get(r.from);
+        return { code: r.from, name: c ? c.name : '', desc: r.description };
       });
-    const creditReq = REQUIREMENTS.find(r => r.type === 'credit_requirement' && r.to === code);
-    if (creditReq) prereqCodes.push('mín. ' + creditReq.min_credits + ' CR cursados');
+    const creditReq = REQUIREMENTS.find(function(r) { return r.type === 'credit_requirement' && r.to === code; });
 
     const prereqEl = document.getElementById('popup-prereqs');
     prereqEl.innerHTML = '';
-    if (prereqCodes.length === 0) {
-      prereqEl.textContent = '—';
+    if (prereqs.length === 0 && !creditReq) {
+      const none = document.createElement('span');
+      none.className = 'popup-empty';
+      none.textContent = 'Nenhum pré-requisito';
+      prereqEl.appendChild(none);
     } else {
       const ul = document.createElement('ul');
-      ul.style.cssText = 'list-style:none; padding:0; margin:0;';
-      prereqCodes.forEach(p => {
+      ul.className = 'popup-req-list';
+      prereqs.forEach(function(p) {
         const li = document.createElement('li');
-        li.textContent = p;
+        li.className = 'popup-req-item';
+        const codeSpan = document.createElement('span');
+        codeSpan.className = 'popup-req-code';
+        codeSpan.textContent = p.code;
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'popup-req-name';
+        nameSpan.textContent = p.name + (p.desc ? ' (' + p.desc + ')' : '');
+        li.appendChild(codeSpan);
+        li.appendChild(nameSpan);
         ul.appendChild(li);
       });
+      if (creditReq) {
+        const li = document.createElement('li');
+        li.className = 'popup-req-item';
+        const span = document.createElement('span');
+        span.className = 'popup-req-name';
+        span.textContent = 'Mín. ' + creditReq.min_credits + ' créditos cursados';
+        li.appendChild(span);
+        ul.appendChild(li);
+      }
       prereqEl.appendChild(ul);
+    }
+
+    // Dependentes (cursos que têm esta disciplina como pré-requisito)
+    const dependents = REQUIREMENTS
+      .filter(function(r) { return r.from === code && r.to; })
+      .map(function(r) {
+        const c = courseMap.get(r.to);
+        return { code: r.to, name: c ? c.name : '' };
+      });
+
+    const depsEl = document.getElementById('popup-dependents');
+    depsEl.innerHTML = '';
+    if (dependents.length === 0) {
+      const none = document.createElement('span');
+      none.className = 'popup-empty';
+      none.textContent = 'Nenhuma dependência';
+      depsEl.appendChild(none);
+    } else {
+      const ul = document.createElement('ul');
+      ul.className = 'popup-req-list';
+      dependents.forEach(function(d) {
+        const li = document.createElement('li');
+        li.className = 'popup-req-item';
+        const codeSpan = document.createElement('span');
+        codeSpan.className = 'popup-req-code';
+        codeSpan.textContent = d.code;
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'popup-req-name';
+        nameSpan.textContent = d.name;
+        li.appendChild(codeSpan);
+        li.appendChild(nameSpan);
+        ul.appendChild(li);
+      });
+      depsEl.appendChild(ul);
     }
 
     popup.hidden = false;
