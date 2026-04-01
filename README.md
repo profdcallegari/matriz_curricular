@@ -6,6 +6,11 @@ Utilitário de linha de comando que, a partir de um arquivo JSON contendo a estr
 
 ---
 
+## Exemplo de Resultado
+
+Veja aqui um exemplo de resultado do utilitário.
+[Acessar a página de um currículo de exemplo: 99TI](https://profdcallegari.github.io/matriz_curricular/)
+
 ## Funcionalidades
 
 - Leitura de arquivo JSON com a estrutura completa do currículo
