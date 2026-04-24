@@ -201,8 +201,8 @@
       "tags": []
     },
     {
-      "code": "98801-04",
-      "name": "Engenharia de Software I",
+      "code": "4636H-04",
+      "name": "Fundamentos de Desenvolvimento de Software",
       "hours": 60,
       "credits": 4,
       "level": 4,
@@ -210,8 +210,8 @@
       "tags": []
     },
     {
-      "code": "4636H-04",
-      "name": "Fundamentos de Desenvolvimento de Software",
+      "code": "98801-04",
+      "name": "Engenharia de Software I",
       "hours": 60,
       "credits": 4,
       "level": 4,

@@ -151,8 +151,23 @@
     }
     .arrow-line {
       fill: none;
-      stroke: #333;
-      stroke-width: 1.5;
+      stroke: #1a3a6b;
+    }
+    .arrows-layer.link-style-paths .arrow-line {
+      opacity: 0.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .arrows-layer.link-style-arrows .arrow-line {
+      opacity: 0.9;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    .arrow-group[data-type="special"] .arrow-line {
+      stroke: #b45309;
+    }
+    .arrow-group[data-type="corequisite"] .arrow-line {
+      stroke: #475569;
     }
     .arrows-layer.hidden .arrow-group { display: none; }
     .arrow-label {
@@ -735,20 +750,6 @@
           </div>
           <div class="card-wrapper">
             <div class="course-card"
-               id="card-98801-04"
-               data-code="98801-04"
-               tabindex="0"
-               role="button"
-               aria-label="Engenharia de Software I">
-              <div class="card-body">
-                <span class="card-name">Engenharia de Software I</span>
-                <span class="card-credits">(4)</span>
-              </div>
-              <div class="card-footer"></div>
-            </div>
-          </div>
-          <div class="card-wrapper">
-            <div class="course-card"
                id="card-4636H-04"
                data-code="4636H-04"
                tabindex="0"
@@ -756,6 +757,20 @@
                aria-label="Fundamentos de Desenvolvimento de Software">
               <div class="card-body">
                 <span class="card-name">Fundamentos de Desenvolvimento de Software</span>
+                <span class="card-credits">(4)</span>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="card-wrapper">
+            <div class="course-card"
+               id="card-98801-04"
+               data-code="98801-04"
+               tabindex="0"
+               role="button"
+               aria-label="Engenharia de Software I">
+              <div class="card-body">
+                <span class="card-name">Engenharia de Software I</span>
                 <span class="card-credits">(4)</span>
               </div>
               <div class="card-footer"></div>
@@ -1161,7 +1176,7 @@
         </div>
       </div>
     </div>
-    <svg class="arrows-layer" width="1540" height="712" aria-hidden="true">
+    <svg class="arrows-layer link-style-arrows" width="1540" height="712" aria-hidden="true">
       <defs>
         <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
           <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
@@ -1171,30 +1186,33 @@
        data-type="prerequisite"
        data-from="95303-04"
        data-to="4611E-04">
-      <polyline points="140,354 170,354 170,102 200,102"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,350 170,350 170,102 200,102"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98707-02"
        data-to="98702-04">
-      <polyline points="140,102 270,102 270,606 400,606"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,102 270,102 270,602 400,602"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4611C-06"
        data-to="4611F-04">
-      <polyline points="140,186 200,186"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,178 170,178 170,186 200,186"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1202,59 +1220,65 @@
        data-from="4611C-06"
        data-to="4645G-04">
       <polyline points="140,186 170,186 170,270 200,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4611C-06"
        data-to="98701-04">
-      <polyline points="140,186 270,186 270,270 400,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,194 270,194 270,266 400,266"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="95300-04"
        data-to="95301-04">
-      <polyline points="140,270 170,270 170,522 200,522"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,274 170,274 170,522 200,522"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="95300-04"
        data-to="95304-04">
-      <polyline points="140,270 270,270 270,354 400,354"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,266 270,266 270,354 400,354"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4611F-04"
        data-to="4636H-04">
-      <polyline points="340,186 470,186 470,354 600,354"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="340,190 470,190 470,270 600,270"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4611F-04"
        data-to="98713-04">
-      <polyline points="340,186 470,186 470,102 600,102"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="340,182 470,182 470,102 600,102"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1262,9 +1286,10 @@
        data-from="4645G-04"
        data-to="4645H-04">
       <polyline points="340,270 370,270 370,102 400,102"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1272,29 +1297,32 @@
        data-from="98901-04"
        data-to="98902-02">
       <polyline points="340,438 400,438"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4646B-04"
        data-to="98G03-04">
-      <polyline points="340,354 370,354 370,522 400,522"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="340,358 370,358 370,522 400,522"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4646B-04"
        data-to="98701-04">
-      <polyline points="340,354 370,354 370,270 400,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="340,350 370,350 370,274 400,274"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1302,19 +1330,21 @@
        data-from="4645H-04"
        data-to="4646Z-04">
       <polyline points="540,102 670,102 670,354 800,354"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="4645H-04"
        data-to="98708-04">
-      <polyline points="540,102 770,102 770,270 1000,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="540,94 770,94 770,270 1000,270"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1322,9 +1352,10 @@
        data-from="98902-02"
        data-to="98H00-04">
       <polyline points="540,438 600,438"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1332,9 +1363,10 @@
        data-from="98701-04"
        data-to="98716-04">
       <polyline points="540,270 570,270 570,522 600,522"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1342,29 +1374,32 @@
        data-from="95304-04"
        data-to="4611G-04">
       <polyline points="540,354 870,354 870,438 1200,438"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98801-04"
        data-to="98802-02">
-      <polyline points="740,270 770,270 770,186 800,186"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="740,350 770,350 770,186 800,186"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98801-04"
        data-to="98905-04">
-      <polyline points="740,270 800,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="740,358 770,358 770,270 800,270"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1372,19 +1407,21 @@
        data-from="98716-04"
        data-to="4646X-04">
       <polyline points="740,522 770,522 770,438 800,438"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="95302-04"
        data-to="4646N-04">
-      <polyline points="740,606 800,606"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="740,606 770,606 770,610 800,610"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1392,29 +1429,32 @@
        data-from="4646Z-04"
        data-to="98715-04">
       <polyline points="940,354 1170,354 1170,270 1400,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98700-04"
        data-to="98709-04">
-      <polyline points="940,522 970,522 970,354 1000,354"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="940,518 970,518 970,354 1000,354"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98700-04"
        data-to="4646I-04">
-      <polyline points="940,522 1000,522"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="940,526 970,526 970,522 1000,522"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1422,19 +1462,21 @@
        data-from="98708-04"
        data-to="98706-04">
       <polyline points="1140,270 1200,270"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="prerequisite"
        data-from="98709-04"
        data-to="4647A-04">
-      <polyline points="1140,354 1200,354"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="1140,346 1170,346 1170,354 1200,354"
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
@@ -1442,19 +1484,21 @@
        data-from="98711-02"
        data-to="98714-02">
       <polyline points="1340,102 1400,102"
-                stroke-dasharray="none"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="none"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="95303-04"
        data-to="46515-04">
-      <polyline points="140,354 270,354 270,186 400,186"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="140,358 270,358 270,186 400,186"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="270" y="182">RE</text>
     </g>
@@ -1463,9 +1507,10 @@
        data-from="98705-02"
        data-to="4646B-04">
       <polyline points="140,438 170,438 170,354 200,354"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="170" y="350">RE</text>
     </g>
@@ -1474,9 +1519,10 @@
        data-from="4611E-04"
        data-to="98703-02">
       <polyline points="340,102 470,102 470,186 600,186"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="470" y="182">RE</text>
     </g>
@@ -1484,21 +1530,23 @@
        data-type="special"
        data-from="95301-04"
        data-to="4646N-04">
-      <polyline points="340,522 570,522 570,606 800,606"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="340,522 570,522 570,602 800,602"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
-    <text class="arrow-label" x="570" y="602">RE</text>
+    <text class="arrow-label" x="570" y="598">RE</text>
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="46515-04"
        data-to="4647F-04">
-      <polyline points="540,186 670,186 670,102 800,102"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="540,182 670,182 670,102 800,102"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="670" y="98">RE</text>
     </g>
@@ -1506,43 +1554,47 @@
        data-type="special"
        data-from="46515-04"
        data-to="4645K-04">
-      <polyline points="540,186 1200,186"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="540,190 870,190 870,182 1200,182"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
-    <text class="arrow-label" x="1200" y="182">RE</text>
+    <text class="arrow-label" x="870" y="178">RE</text>
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="98G03-04"
        data-to="98700-04">
-      <polyline points="540,522 800,522"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="540,526 800,526"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
-    <text class="arrow-label" x="800" y="518">RE</text>
+    <text class="arrow-label" x="800" y="522">RE</text>
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="98G03-04"
        data-to="4645K-04">
-      <polyline points="540,522 870,522 870,186 1200,186"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="540,518 870,518 870,190 1200,190"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
-    <text class="arrow-label" x="870" y="182">RE</text>
+    <text class="arrow-label" x="870" y="186">RE</text>
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="98802-02"
        data-to="98704-04">
       <polyline points="940,186 1000,186"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="1000" y="182">RE</text>
     </g>
@@ -1550,21 +1602,23 @@
        data-type="special"
        data-from="98713-04"
        data-to="98700-04">
-      <polyline points="740,102 770,102 770,522 800,522"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="740,102 770,102 770,518 800,518"
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
-    <text class="arrow-label" x="770" y="518">RE</text>
+    <text class="arrow-label" x="770" y="514">RE</text>
     </g>
     <g class="arrow-group"
        data-type="special"
        data-from="98709-04"
        data-to="4647B-04">
       <polyline points="1140,354 1400,354"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="1400" y="350">RE</text>
     </g>
@@ -1573,9 +1627,10 @@
        data-from="4646I-04"
        data-to="4645J-04">
       <polyline points="1140,522 1270,522 1270,438 1400,438"
-                stroke-dasharray="8,4"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="8,4"
+      stroke-width="1.6"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     <text class="arrow-label" x="1270" y="434">RE</text>
     </g>
@@ -1583,30 +1638,33 @@
        data-type="corequisite"
        data-from="4645H-04"
        data-to="98702-04">
-      <polyline points="470,132 470,144 470,144 470,576"
-                stroke-dasharray="3,3"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="478,132 478,145.4 474,145.4 474,576"
+      stroke-dasharray="3,3"
+      stroke-width="1.4"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="corequisite"
        data-from="4636H-04"
        data-to="98801-04">
-      <polyline points="670,384 670,396 670,396 670,240"
-                stroke-dasharray="3,3"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="670,300 670,312 670,312 670,324"
+      stroke-dasharray="3,3"
+      stroke-width="1.4"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     <g class="arrow-group"
        data-type="corequisite"
        data-from="98709-04"
        data-to="98710-02">
-      <polyline points="1070,384 1070,396 1070,396 1070,408"
-                stroke-dasharray="3,3"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      <polyline points="1078,384 1078,398.8 1070,398.8 1070,408"
+      stroke-dasharray="3,3"
+      stroke-width="1.4"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
       
     </g>
     </svg>
@@ -1614,11 +1672,11 @@
   <aside class="legend-panel">
     <h2 class="legend-title">Legenda</h2>
     <dl class="legend-list">
-      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend-1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#1a3a6b" stroke-width="1.6" marker-end="url(#arrowhead-legend-1)"/></svg></dt>
       <dd>Pré-requisito</dd>
-      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend-2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#b45309" stroke-width="1.6" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend-2)"/></svg></dt>
       <dd>Pré-requisito especial (RE)</dd>
-      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt><svg width="60" height="14"><defs><marker id="arrowhead-legend-3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#475569" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend-3)"/></svg></dt>
       <dd>Co-requisito</dd>
       <dt><span class="credit-req-badge">XX CR</span></dt>
       <dd>Requisito de créditos mínimos</dd>
@@ -1687,7 +1745,7 @@
 (function () {
   'use strict';
 
-  const COURSES = [{"code":"98707-02","name":"Metodologia Científica","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"4611C-06","name":"Fundamentos de Programação","hours":90,"credits":6,"syllabus":"Discussão sobre algoritmos como ferramenta para a descrição da solução de problemas e os fundamentos necessários para sua implementação usando linguagens de programação. Exame das noções de constantes, variáveis, tipos e expressões. Estudo de programas sequenciais, comandos de entrada e saída e o processo de compilação. Construção de programas com seleção, iterativos e uso do conceito de subprogramas. Estudo e uso de estruturas de dados usando arranjos e matrizes e conceitos básicos de classes e objetos.","tags":[]},{"code":"95300-04","name":"Cálculo I","hours":60,"credits":4,"syllabus":"Caracterização de funções de uma variável. Estudo do domínio e representação gráfica dessas funções. Análise de limites e continuidade. Definições e aplicações de derivadas diferenciais.","tags":[]},{"code":"95303-04","name":"Matemática Discreta","hours":60,"credits":4,"syllabus":"Estudo da lógica proposicional e técnicas básicas de demonstração. Estudo da álgebra de conjuntos. Estudo e discussão dos conceitos de relações, funções totais e parciais, relações de ordem parcial e total e relações de equivalência. Análise de definições indutivas, recursão e do princípio de indução. Introdução à álgebra Booleana.","tags":[]},{"code":"98705-02","name":"Introdução à Computação","hours":30,"credits":2,"syllabus":"Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.","tags":[]},{"code":"1501A-04","name":"Ética e Cidadania","hours":60,"credits":4,"syllabus":"Abordagem de problemas e conceitos filosóficos relacionados à moralidade e ao exercício da cidadania. Introdução aos principais temas e problemas de Ética, presentes na História da Filosofia. Reflexão filosófica sobre o ideal democrático, a cidadania e os direitos humanos.","tags":[]},{"code":"4611E-04","name":"Lógica para Computação","hours":60,"credits":4,"syllabus":"Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.","tags":[]},{"code":"4611F-04","name":"Programação Orientada a Objetos","hours":60,"credits":4,"syllabus":"Desenvolvimento de sistemas de software de complexidade média utilizando o paradigma de orientação a objetos. Estudo e análise dos conceitos de abstração, herança e polimorfismo. Discussão de aspectos avançados sobre classes. Uso de bibliotecas de coleções. Projeto de sistemas orientados a objetos. Manipulação básica de arquivos texto. Noções de programação orientada a eventos.","tags":[]},{"code":"4645G-04","name":"Algoritmos e Estruturas de Dados I","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados lineares e hierárquicas: listas, filas, pilhas e árvores. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Construção de algoritmos e implementações para problemas de ordenação e pesquisa. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"4646B-04","name":"Fundamentos de Sistemas Digitais","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98901-04","name":"Banco de Dados I","hours":60,"credits":4,"syllabus":"Entendimento da arquitetura típica de um banco de dados. Estudo sobre modelos de dados: clássicos, relacional e pós-relacionais. Compreensão dos diferentes formalismos para modelagem conceitual. Solução de projetos de bancos de dados pelo uso de dependências funcionais, formas normais e de restrições de integridade. Solução de implementação de bancos de dados: modelo lógico e físico, e mapeamento do modelo conceitual para o de implementação.","tags":[]},{"code":"95301-04","name":"Cálculo II","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4645H-04","name":"Algoritmos e Estruturas de Dados II","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"46515-04","name":"Linguagens, Autômatos e Computação","hours":60,"credits":4,"syllabus":"Introdução às linguagens formais: definições, propriedades e operações. Estudo de linguagens na hierarquia de Chomsky: regulares, livres de contexto, sensíveis ao contexto, enumeráveis recursivamente. Estudo de máquinas como reconhecedores de linguagens: autômatos finitos, autômatos de pilha e máquinas de Turing. Estudo teórico prático de expressões regulares. Introdução ao conceito de computabilidade.","tags":[]},{"code":"98701-04","name":"Programação de Baixo Nível","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"95304-04","name":"Probabilidade e Estatística","hours":60,"credits":4,"syllabus":"Organização, análise, interpretação de dados e estudo de modelos probabilísticas enfatizando o princípio da incerteza. Investigação da relação entre variáveis. Noções de amostragem visando à estimação de parâmetros e o estabelecimento de hipóteses estatísticas.","tags":[]},{"code":"98902-02","name":"Banco de Dados II","hours":30,"credits":2,"syllabus":"Visão geral das principais formas de uso de bancos de dados: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Visão geral da definição de dados na abordagem relacional, em modelos OLAP, bem como nas abordagens sem esquemas prévios (NoSQL). Estudo sobre linguagens de definição e manipulação de banco de dados e, em especial, SQL. Definição e consultas de dados nas principais formas de uso de bancos de dados, com entendimento dos principais fatores envolvidos com desempenho.","tags":[]},{"code":"98G03-04","name":"Organização e Arquitetura de Processadores","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98702-04","name":"Prática em Pesquisa","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98713-04","name":"Fundamentos de Proc. Paralelo e Distribuído","hours":60,"credits":4,"syllabus":"Introdução à computação concorrente e sua representação com sistemas de transição de estados. Estudo de processos e threads. Estudo sobre memória compartilhada e passagem de mensagem. Descrição da semântica de mecanismos de sincronização e seu uso na programação concorrente. Apresentação de abordagens para modelagem e avaliação de propriedades de sistemas concorrentes. Apresentação dos objetivos e pressupostos ambientais para sistemas paralelos e para sistemas distribuídos. Análise das abordagens para modelagem de aplicações paralelas com memória compartilhada e passagem de mensagem. Estudo das principais abstrações para programação distribuída. Apresentação de estudos de caso de sistemas paralelos e de sistemas distribuídos.","tags":[]},{"code":"98703-02","name":"Programação Funcional","hours":60,"credits":2,"syllabus":"x","tags":[]},{"code":"98801-04","name":"Engenharia de Software I","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4636H-04","name":"Fundamentos de Desenvolvimento de Software","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98H00-04","name":"Infraestrutura para Gestão de Dados","hours":60,"credits":4,"syllabus":"Visão geral de sistemas de bancos de dados, suas principais funcionalidades e formas de uso: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Entendimento dos modelos de transações de bancos de dados, de gerência de memória principal e secundária, de controle de concorrência e de recuperação após falhas. Estudo sobre a otimização de consultas e de transações em bancos de dados. Visão geral sobre a gestão de bancos de dados sem esquemas prévios.","tags":[]},{"code":"98716-04","name":"Computação Gráfica","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"95302-04","name":"Álgebra Linear e Geometria Analítica","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4647F-04","name":"Teoria da Computabilidade e Complexidade","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98802-02","name":"Engenharia de Software II","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"98905-04","name":"Experiência do Usuário","hours":60,"credits":4,"syllabus":"Reflexão sobre conceitos e teorias relacionados à qualidade de uso e design de sistemas interativos. Aplicação de técnicas para elicitação e análise de dados sobre usuários e tarefas. Aplicação de fundamentos e técnicas para concepção de interfaces e de interação. Aplicação de métodos de avaliação de sistemas interativos. Investigação de interfaces não-convencionais e seu impacto em sistemas interativos.","tags":[]},{"code":"4646Z-04","name":"Projeto e Otimização de Algoritmos","hours":60,"credits":4,"syllabus":"Estudo teórico e prático das principais técnicas para o projeto de algoritmos, como algoritmos gulosos, divisão e conquista, programação dinâmica, backtracking, branch and bound e algoritmos aproximativos como algoritmos genéticos, gradiente descendente e outros.","tags":[]},{"code":"4646X-04","name":"Projeto de Desenvolvimento de Jogos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98700-04","name":"Sistemas Operacionais","hours":60,"credits":4,"syllabus":"Apresentação da organização básica de sistemas operacionais. Estudo da evolução da estrutura e funcionamento dos sistemas operacionais. Apresentação do conceito de processos e de mecanismos de sincronização entre processos que compartilham memória e sua implementação em um sistema operacional. Exemplos práticos de criação e sincronização de processos. Introdução e exploração do conceito de algoritmos de escalonamento. Estudo da comunicação inter-processos. Análise e discussão de problemas relacionados à \"deadlock\" e à comunicação entre processos. Estudo sobre gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos. Análise e discussão de problemas relacionados ao gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos.","tags":[]},{"code":"4646N-04","name":"Métodos Numéricos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4646M-04","name":"Métodos Formais","hours":60,"credits":4,"syllabus":"Conceitos essenciais de especificação formal, verificação formal e métodos formais. Especificação e verificação de modelos e programas. Estudo da lógica de Hoare. Especificação de assertivas, pré e pós-condições, invariantes e variantes. Aplicação de ferramentas de verificação automática sobre especificações e programas.","tags":[]},{"code":"98704-04","name":"Prática em Engenharia de Software","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98708-04","name":"Inteligência Artificial","hours":60,"credits":4,"syllabus":"Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos. Introdução ao Aprendizado de Máquina com ênfase em Aprendizado por reforço.","tags":[]},{"code":"98709-04","name":"Fundamentos de Redes de Computadores","hours":60,"credits":4,"syllabus":"Estudo dos Modelos de referência de interconexão de computadores OSI/ISO e da Arquitetura Internet, apresentando em mais detalhamento os Níveis de Rede, Transporte e Aplicação, com seus conceitos, funções e protocolos. Estudo e análise do impacto das funções dos protocolos de comunicação no desenvolvimento e desempenho das aplicações.","tags":[]},{"code":"98710-02","name":"Laboratório de Redes de Computadores","hours":30,"credits":2,"syllabus":"Desenvolvimento de experimentos que abranjam operação, configuração e análise de protocolos da Arquitetura Internet. Desenvolvimento e análise de comportamento de aplicações distribuídas com diferentes requisitos de qualidade. Simulação e análise de arquiteturas de comunicação variadas.","tags":[]},{"code":"4646I-04","name":"Laboratório de Sistemas Operacionais","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98711-02","name":"Trabalho de Conclusão I","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"4645K-04","name":"Construção de Compiladores","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98706-04","name":"Aprendizado de Máquina","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4647A-04","name":"Redes de Computadores Avançadas","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4611G-04","name":"Simulação e Métodos Analíticos","hours":60,"credits":4,"syllabus":"Estudo de técnicas e opções para simulação e análise estocástica através de modelos computacionais. Apresentação de técnicas de representação de estados e de tempo, de aleatoriedade e determinismo em contexto computacional. Estudo de métodos e ferramentas básicas de simulação e métodos analíticos. Apresentação de formalismos clássicos e estruturados para representação de modelos.","tags":[]},{"code":"98714-02","name":"Trabalho de Conclusão II","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"11521-04","name":"Humanismo e Cultura Religiosa","hours":60,"credits":4,"syllabus":"A condição humana aberta ao transcendente; Fé cristã e cultura atual; O estudo do fenômeno religioso em suas diferentes Tradições; Elementos da cultura e da religiosidade afro-brasileira e indígena; A relação entre fé e razão, e ciência e religião; Motivação para ações comunitárias, como engajamento consequente de uma consciência social e da fé cristã.","tags":[]},{"code":"98715-04","name":"Segurança de Sistemas","hours":60,"credits":4,"syllabus":"Apresentação e implementação de criptografia clássica; cifras de fluxo (stream ciphers) e cifras de bloco (block ciphers). Entendimento de integridade de mensagens (Message Authentication Codes). Conhecimento de criptografia simétrica, aritmética modular; números primos e fatoração, funções e geradores pseudo-aleatórios, e criptografia assimétrica. Uso de bibliotecas de criptografia. Apresentação do Marco Civil da Internet. Entendimento e como cumprir a Lei de Proteção de Dados.","tags":[]},{"code":"4647B-04","name":"Sistemas Distribuídos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4645J-04","name":"Computação Paralela","hours":60,"credits":4,"syllabus":"x","tags":[]}];
+  const COURSES = [{"code":"98707-02","name":"Metodologia Científica","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"4611C-06","name":"Fundamentos de Programação","hours":90,"credits":6,"syllabus":"Discussão sobre algoritmos como ferramenta para a descrição da solução de problemas e os fundamentos necessários para sua implementação usando linguagens de programação. Exame das noções de constantes, variáveis, tipos e expressões. Estudo de programas sequenciais, comandos de entrada e saída e o processo de compilação. Construção de programas com seleção, iterativos e uso do conceito de subprogramas. Estudo e uso de estruturas de dados usando arranjos e matrizes e conceitos básicos de classes e objetos.","tags":[]},{"code":"95300-04","name":"Cálculo I","hours":60,"credits":4,"syllabus":"Caracterização de funções de uma variável. Estudo do domínio e representação gráfica dessas funções. Análise de limites e continuidade. Definições e aplicações de derivadas diferenciais.","tags":[]},{"code":"95303-04","name":"Matemática Discreta","hours":60,"credits":4,"syllabus":"Estudo da lógica proposicional e técnicas básicas de demonstração. Estudo da álgebra de conjuntos. Estudo e discussão dos conceitos de relações, funções totais e parciais, relações de ordem parcial e total e relações de equivalência. Análise de definições indutivas, recursão e do princípio de indução. Introdução à álgebra Booleana.","tags":[]},{"code":"98705-02","name":"Introdução à Computação","hours":30,"credits":2,"syllabus":"Apresentação da Computação como área de estudo: suas origens, seu tema de estudo e sua relação com os diversos cursos de computação. Apresentação das grandes camadas de um sistema computacional: informação, hardware, sistema operacional, aplicações. Estudo teórico-prático da representação de informação, com ênfase em sistemas de numeração, em particular o sistema binário. Discussão sobre os grandes desafios da computação.","tags":[]},{"code":"1501A-04","name":"Ética e Cidadania","hours":60,"credits":4,"syllabus":"Abordagem de problemas e conceitos filosóficos relacionados à moralidade e ao exercício da cidadania. Introdução aos principais temas e problemas de Ética, presentes na História da Filosofia. Reflexão filosófica sobre o ideal democrático, a cidadania e os direitos humanos.","tags":[]},{"code":"4611E-04","name":"Lógica para Computação","hours":60,"credits":4,"syllabus":"Estudos dos principais conceitos da Lógica Matemática e de sua aplicação na Ciência da Computação. Exame e discussão dos conceitos de sintaxe e semântica, equivalência, relação de consequência lógica, relação de dedutibilidade, cálculo de dedução natural e outros sistemas de dedução tanto para a lógica proposicional como para a lógica de predicados. Aplicação do raciocínio automático na computação.","tags":[]},{"code":"4611F-04","name":"Programação Orientada a Objetos","hours":60,"credits":4,"syllabus":"Desenvolvimento de sistemas de software de complexidade média utilizando o paradigma de orientação a objetos. Estudo e análise dos conceitos de abstração, herança e polimorfismo. Discussão de aspectos avançados sobre classes. Uso de bibliotecas de coleções. Projeto de sistemas orientados a objetos. Manipulação básica de arquivos texto. Noções de programação orientada a eventos.","tags":[]},{"code":"4645G-04","name":"Algoritmos e Estruturas de Dados I","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados lineares e hierárquicas: listas, filas, pilhas e árvores. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Construção de algoritmos e implementações para problemas de ordenação e pesquisa. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"4646B-04","name":"Fundamentos de Sistemas Digitais","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98901-04","name":"Banco de Dados I","hours":60,"credits":4,"syllabus":"Entendimento da arquitetura típica de um banco de dados. Estudo sobre modelos de dados: clássicos, relacional e pós-relacionais. Compreensão dos diferentes formalismos para modelagem conceitual. Solução de projetos de bancos de dados pelo uso de dependências funcionais, formas normais e de restrições de integridade. Solução de implementação de bancos de dados: modelo lógico e físico, e mapeamento do modelo conceitual para o de implementação.","tags":[]},{"code":"95301-04","name":"Cálculo II","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4645H-04","name":"Algoritmos e Estruturas de Dados II","hours":60,"credits":4,"syllabus":"Construção e raciocínio sobre diferentes algoritmos e implementações para estruturas de dados não lineares: heaps, tabelas de espalhamento e grafos. Apresentação de aplicações avançadas das estruturas de dados: heapsort, conjuntos, tries, árvores B, quadtrees e codificação de Huffman. Exame da adequação destes algoritmos na solução de diversas classes de problemas. Discussão, análise e raciocínio sobre a complexidade de algoritmos e implementações correspondentes.","tags":[]},{"code":"46515-04","name":"Linguagens, Autômatos e Computação","hours":60,"credits":4,"syllabus":"Introdução às linguagens formais: definições, propriedades e operações. Estudo de linguagens na hierarquia de Chomsky: regulares, livres de contexto, sensíveis ao contexto, enumeráveis recursivamente. Estudo de máquinas como reconhecedores de linguagens: autômatos finitos, autômatos de pilha e máquinas de Turing. Estudo teórico prático de expressões regulares. Introdução ao conceito de computabilidade.","tags":[]},{"code":"98701-04","name":"Programação de Baixo Nível","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"95304-04","name":"Probabilidade e Estatística","hours":60,"credits":4,"syllabus":"Organização, análise, interpretação de dados e estudo de modelos probabilísticas enfatizando o princípio da incerteza. Investigação da relação entre variáveis. Noções de amostragem visando à estimação de parâmetros e o estabelecimento de hipóteses estatísticas.","tags":[]},{"code":"98902-02","name":"Banco de Dados II","hours":30,"credits":2,"syllabus":"Visão geral das principais formas de uso de bancos de dados: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Visão geral da definição de dados na abordagem relacional, em modelos OLAP, bem como nas abordagens sem esquemas prévios (NoSQL). Estudo sobre linguagens de definição e manipulação de banco de dados e, em especial, SQL. Definição e consultas de dados nas principais formas de uso de bancos de dados, com entendimento dos principais fatores envolvidos com desempenho.","tags":[]},{"code":"98G03-04","name":"Organização e Arquitetura de Processadores","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98702-04","name":"Prática em Pesquisa","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98713-04","name":"Fundamentos de Proc. Paralelo e Distribuído","hours":60,"credits":4,"syllabus":"Introdução à computação concorrente e sua representação com sistemas de transição de estados. Estudo de processos e threads. Estudo sobre memória compartilhada e passagem de mensagem. Descrição da semântica de mecanismos de sincronização e seu uso na programação concorrente. Apresentação de abordagens para modelagem e avaliação de propriedades de sistemas concorrentes. Apresentação dos objetivos e pressupostos ambientais para sistemas paralelos e para sistemas distribuídos. Análise das abordagens para modelagem de aplicações paralelas com memória compartilhada e passagem de mensagem. Estudo das principais abstrações para programação distribuída. Apresentação de estudos de caso de sistemas paralelos e de sistemas distribuídos.","tags":[]},{"code":"98703-02","name":"Programação Funcional","hours":60,"credits":2,"syllabus":"x","tags":[]},{"code":"4636H-04","name":"Fundamentos de Desenvolvimento de Software","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98801-04","name":"Engenharia de Software I","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98H00-04","name":"Infraestrutura para Gestão de Dados","hours":60,"credits":4,"syllabus":"Visão geral de sistemas de bancos de dados, suas principais funcionalidades e formas de uso: orientados a transação, orientados ao processamento analítico e orientados a consultas de dados não convencionais. Entendimento dos modelos de transações de bancos de dados, de gerência de memória principal e secundária, de controle de concorrência e de recuperação após falhas. Estudo sobre a otimização de consultas e de transações em bancos de dados. Visão geral sobre a gestão de bancos de dados sem esquemas prévios.","tags":[]},{"code":"98716-04","name":"Computação Gráfica","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"95302-04","name":"Álgebra Linear e Geometria Analítica","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4647F-04","name":"Teoria da Computabilidade e Complexidade","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98802-02","name":"Engenharia de Software II","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"98905-04","name":"Experiência do Usuário","hours":60,"credits":4,"syllabus":"Reflexão sobre conceitos e teorias relacionados à qualidade de uso e design de sistemas interativos. Aplicação de técnicas para elicitação e análise de dados sobre usuários e tarefas. Aplicação de fundamentos e técnicas para concepção de interfaces e de interação. Aplicação de métodos de avaliação de sistemas interativos. Investigação de interfaces não-convencionais e seu impacto em sistemas interativos.","tags":[]},{"code":"4646Z-04","name":"Projeto e Otimização de Algoritmos","hours":60,"credits":4,"syllabus":"Estudo teórico e prático das principais técnicas para o projeto de algoritmos, como algoritmos gulosos, divisão e conquista, programação dinâmica, backtracking, branch and bound e algoritmos aproximativos como algoritmos genéticos, gradiente descendente e outros.","tags":[]},{"code":"4646X-04","name":"Projeto de Desenvolvimento de Jogos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98700-04","name":"Sistemas Operacionais","hours":60,"credits":4,"syllabus":"Apresentação da organização básica de sistemas operacionais. Estudo da evolução da estrutura e funcionamento dos sistemas operacionais. Apresentação do conceito de processos e de mecanismos de sincronização entre processos que compartilham memória e sua implementação em um sistema operacional. Exemplos práticos de criação e sincronização de processos. Introdução e exploração do conceito de algoritmos de escalonamento. Estudo da comunicação inter-processos. Análise e discussão de problemas relacionados à \"deadlock\" e à comunicação entre processos. Estudo sobre gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos. Análise e discussão de problemas relacionados ao gerenciamento de memória, gerenciamento de entrada e saída e gerenciamento de arquivos.","tags":[]},{"code":"4646N-04","name":"Métodos Numéricos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4646M-04","name":"Métodos Formais","hours":60,"credits":4,"syllabus":"Conceitos essenciais de especificação formal, verificação formal e métodos formais. Especificação e verificação de modelos e programas. Estudo da lógica de Hoare. Especificação de assertivas, pré e pós-condições, invariantes e variantes. Aplicação de ferramentas de verificação automática sobre especificações e programas.","tags":[]},{"code":"98704-04","name":"Prática em Engenharia de Software","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98708-04","name":"Inteligência Artificial","hours":60,"credits":4,"syllabus":"Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos. Introdução ao Aprendizado de Máquina com ênfase em Aprendizado por reforço.","tags":[]},{"code":"98709-04","name":"Fundamentos de Redes de Computadores","hours":60,"credits":4,"syllabus":"Estudo dos Modelos de referência de interconexão de computadores OSI/ISO e da Arquitetura Internet, apresentando em mais detalhamento os Níveis de Rede, Transporte e Aplicação, com seus conceitos, funções e protocolos. Estudo e análise do impacto das funções dos protocolos de comunicação no desenvolvimento e desempenho das aplicações.","tags":[]},{"code":"98710-02","name":"Laboratório de Redes de Computadores","hours":30,"credits":2,"syllabus":"Desenvolvimento de experimentos que abranjam operação, configuração e análise de protocolos da Arquitetura Internet. Desenvolvimento e análise de comportamento de aplicações distribuídas com diferentes requisitos de qualidade. Simulação e análise de arquiteturas de comunicação variadas.","tags":[]},{"code":"4646I-04","name":"Laboratório de Sistemas Operacionais","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98711-02","name":"Trabalho de Conclusão I","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"4645K-04","name":"Construção de Compiladores","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"98706-04","name":"Aprendizado de Máquina","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4647A-04","name":"Redes de Computadores Avançadas","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4611G-04","name":"Simulação e Métodos Analíticos","hours":60,"credits":4,"syllabus":"Estudo de técnicas e opções para simulação e análise estocástica através de modelos computacionais. Apresentação de técnicas de representação de estados e de tempo, de aleatoriedade e determinismo em contexto computacional. Estudo de métodos e ferramentas básicas de simulação e métodos analíticos. Apresentação de formalismos clássicos e estruturados para representação de modelos.","tags":[]},{"code":"98714-02","name":"Trabalho de Conclusão II","hours":30,"credits":2,"syllabus":"x","tags":[]},{"code":"11521-04","name":"Humanismo e Cultura Religiosa","hours":60,"credits":4,"syllabus":"A condição humana aberta ao transcendente; Fé cristã e cultura atual; O estudo do fenômeno religioso em suas diferentes Tradições; Elementos da cultura e da religiosidade afro-brasileira e indígena; A relação entre fé e razão, e ciência e religião; Motivação para ações comunitárias, como engajamento consequente de uma consciência social e da fé cristã.","tags":[]},{"code":"98715-04","name":"Segurança de Sistemas","hours":60,"credits":4,"syllabus":"Apresentação e implementação de criptografia clássica; cifras de fluxo (stream ciphers) e cifras de bloco (block ciphers). Entendimento de integridade de mensagens (Message Authentication Codes). Conhecimento de criptografia simétrica, aritmética modular; números primos e fatoração, funções e geradores pseudo-aleatórios, e criptografia assimétrica. Uso de bibliotecas de criptografia. Apresentação do Marco Civil da Internet. Entendimento e como cumprir a Lei de Proteção de Dados.","tags":[]},{"code":"4647B-04","name":"Sistemas Distribuídos","hours":60,"credits":4,"syllabus":"x","tags":[]},{"code":"4645J-04","name":"Computação Paralela","hours":60,"credits":4,"syllabus":"x","tags":[]}];
   const REQUIREMENTS = [{"type":"prerequisite","from":"95303-04","to":"4611E-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98707-02","to":"98702-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611C-06","to":"4611F-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611C-06","to":"4645G-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611C-06","to":"98701-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95300-04","to":"95301-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95300-04","to":"95304-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611F-04","to":"4636H-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4611F-04","to":"98713-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4645G-04","to":"4645H-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98901-04","to":"98902-02","description":null,"min_credits":null},{"type":"prerequisite","from":"4646B-04","to":"98G03-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4646B-04","to":"98701-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4645H-04","to":"4646Z-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4645H-04","to":"98708-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98902-02","to":"98H00-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98701-04","to":"98716-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95304-04","to":"4611G-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98801-04","to":"98802-02","description":null,"min_credits":null},{"type":"prerequisite","from":"98801-04","to":"98905-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98716-04","to":"4646X-04","description":null,"min_credits":null},{"type":"prerequisite","from":"95302-04","to":"4646N-04","description":null,"min_credits":null},{"type":"prerequisite","from":"4646Z-04","to":"98715-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98700-04","to":"98709-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98700-04","to":"4646I-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98708-04","to":"98706-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98709-04","to":"4647A-04","description":null,"min_credits":null},{"type":"prerequisite","from":"98711-02","to":"98714-02","description":null,"min_credits":null},{"type":"special","from":"95303-04","to":"46515-04","description":null,"min_credits":null},{"type":"special","from":"98705-02","to":"4646B-04","description":null,"min_credits":null},{"type":"special","from":"4611E-04","to":"98703-02","description":null,"min_credits":null},{"type":"special","from":"95301-04","to":"4646N-04","description":null,"min_credits":null},{"type":"special","from":"46515-04","to":"4647F-04","description":null,"min_credits":null},{"type":"special","from":"46515-04","to":"4645K-04","description":null,"min_credits":null},{"type":"special","from":"98G03-04","to":"98700-04","description":null,"min_credits":null},{"type":"special","from":"98G03-04","to":"4645K-04","description":null,"min_credits":null},{"type":"special","from":"98802-02","to":"98704-04","description":null,"min_credits":null},{"type":"special","from":"98713-04","to":"98700-04","description":null,"min_credits":null},{"type":"special","from":"98709-04","to":"4647B-04","description":null,"min_credits":null},{"type":"special","from":"4646I-04","to":"4645J-04","description":null,"min_credits":null},{"type":"corequisite","from":"4645H-04","to":"98702-04","description":null,"min_credits":null},{"type":"corequisite","from":"4636H-04","to":"98801-04","description":null,"min_credits":null},{"type":"corequisite","from":"98709-04","to":"98710-02","description":null,"min_credits":null},{"type":"credit_requirement","from":null,"to":"11521-04","description":null,"min_credits":60}];
 
   const courseMap = new Map(COURSES.map(c => [c.code, c]));

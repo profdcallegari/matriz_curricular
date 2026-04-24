@@ -1,4 +1,4 @@
-import { CurriculumFile, CourseInput, RequirementInput, ArrowRoute, Point, LayoutData, ColumnLayout, CardRect, RouteData } from '../types';
+import { CurriculumFile, CourseInput, RequirementInput, ArrowRoute, Point, LayoutData, ColumnLayout, CardRect, RouteData, RenderOptions, LinkRenderStyle } from '../types';
 import { CARD_WIDTH, COL_HEADER_H, HEADER_H, PAGE_MARGIN } from '../layout';
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
@@ -6,7 +6,8 @@ import { CARD_WIDTH, COL_HEADER_H, HEADER_H, PAGE_MARGIN } from '../layout';
 export function renderHtml(
   data: CurriculumFile,
   layout: LayoutData,
-  routes: RouteData
+  routes: RouteData,
+  options: RenderOptions = { linkStyle: 'paths' }
 ): string {
   const courseMap    = new Map<string, CourseInput>(data.courses.map(c => [c.code, c]));
   const reqMap       = new Map<number, RequirementInput>(data.requirements.map((r, i) => [i, r]));
@@ -16,6 +17,7 @@ export function renderHtml(
       .filter(r => r.type === 'credit_requirement' && r.min_credits !== undefined)
       .map(r => [r.to, r.min_credits!])
   );
+  const linkStyle = options.linkStyle;
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -34,17 +36,13 @@ ${renderHeader(data)}
     <div class="columns-row">
 ${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditReqMap)).join('\n')}
     </div>
-    <svg class="arrows-layer" width="${layout.canvasWidth}" height="${layout.canvasHeight}" aria-hidden="true">
-      <defs>
-        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
-        </marker>
-      </defs>
-${routes.arrows.map(a => renderArrow(a, reqMap)).join('\n')}
+    <svg class="arrows-layer link-style-${linkStyle}" width="${layout.canvasWidth}" height="${layout.canvasHeight}" aria-hidden="true">
+${renderArrowDefs(linkStyle)}
+${routes.arrows.map(a => renderArrow(a, reqMap, linkStyle)).join('\n')}
     </svg>
   </div>
   <aside class="legend-panel">
-${renderLegend(uniqueTags)}
+${renderLegend(uniqueTags, linkStyle)}
 ${renderCreditSummary(data.courses, uniqueTags)}
   </aside>
 </div>
@@ -109,10 +107,10 @@ function renderCard(card: CardRect, course: CourseInput, minCredits?: number): s
 
 // ─── Setas SVG ────────────────────────────────────────────────────────────────
 
-function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>): string {
+function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>, linkStyle: LinkRenderStyle): string {
   const req = reqMap.get(arrow.requirementIndex);
   const dashArray = arrowDash(arrow.type);
-  const pointsStr = arrow.points.map((p: Point) => `${p.x},${p.y}`).join(' ');
+  const width = arrowStrokeWidth(arrow.type, linkStyle);
   const from = req?.from ?? '';
   const to   = req?.to   ?? '';
 
@@ -122,14 +120,30 @@ function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>): 
     labelEl = `\n    <text class="arrow-label" x="${mid.x}" y="${mid.y - 4}">${esc(arrow.label)}</text>`;
   }
 
-  return `    <g class="arrow-group"
+  if (linkStyle === 'arrows') {
+    const pointsStr = arrow.points.map((p: Point) => `${p.x},${p.y}`).join(' ');
+    return `    <g class="arrow-group"
        data-type="${arrow.type}"
        data-from="${esc(from)}"
        data-to="${esc(to)}">
       <polyline points="${pointsStr}"
-                stroke-dasharray="${dashArray}"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="${dashArray}"
+      stroke-width="${width}"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
+      ${labelEl}
+    </g>`;
+  }
+
+  const pathD = sankeyPathFromPoints(arrow.points);
+  return `    <g class="arrow-group"
+       data-type="${arrow.type}"
+       data-from="${esc(from)}"
+       data-to="${esc(to)}">
+      <path d="${pathD}"
+            stroke-dasharray="${dashArray}"
+            stroke-width="${width}"
+            class="arrow-line"/>
       ${labelEl}
     </g>`;
 }
@@ -138,6 +152,63 @@ function arrowDash(type: string): string {
   if (type === 'special')     return '8,4';
   if (type === 'corequisite') return '3,3';
   return 'none';
+}
+
+function arrowStrokeWidth(type: string, linkStyle: LinkRenderStyle): number {
+  if (linkStyle === 'arrows') {
+    if (type === 'corequisite') return 1.4;
+    return 1.6;
+  }
+  if (type === 'special') return 5;
+  if (type === 'corequisite') return 4;
+  return 6;
+}
+
+function renderArrowDefs(linkStyle: LinkRenderStyle): string {
+  if (linkStyle !== 'arrows') return '';
+  return `      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+        </marker>
+      </defs>`;
+}
+
+function sankeyPathFromPoints(points: Point[]): string {
+  if (points.length === 0) return '';
+  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+  if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+
+  const radius = 12;
+  let d = `M ${points[0].x} ${points[0].y}`;
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const next = points[i + 1];
+
+    const inDx = curr.x - prev.x;
+    const inDy = curr.y - prev.y;
+    const outDx = next.x - curr.x;
+    const outDy = next.y - curr.y;
+
+    const inLen = Math.hypot(inDx, inDy);
+    const outLen = Math.hypot(outDx, outDy);
+    if (inLen === 0 || outLen === 0) continue;
+
+    const corner = Math.min(radius, inLen * 0.45, outLen * 0.45);
+
+    const enterX = curr.x - (inDx / inLen) * corner;
+    const enterY = curr.y - (inDy / inLen) * corner;
+    const exitX = curr.x + (outDx / outLen) * corner;
+    const exitY = curr.y + (outDy / outLen) * corner;
+
+    d += ` L ${enterX} ${enterY}`;
+    d += ` Q ${curr.x} ${curr.y} ${exitX} ${exitY}`;
+  }
+
+  const last = points[points.length - 1];
+  d += ` L ${last.x} ${last.y}`;
+  return d;
 }
 
 // ─── Popup de detalhes ────────────────────────────────────────────────────────
@@ -185,18 +256,30 @@ function renderPopup(): string {
 
 // ─── Legenda ──────────────────────────────────────────────────────────────────
 
-function renderLegend(tags: string[]): string {
-  const svgDefs = `<defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs>`;
+function renderLegend(tags: string[], linkStyle: LinkRenderStyle): string {
   const tagItems = tags.map(t =>
     `      <dt><span class="tag tag-${esc(t)}">${esc(t)}</span></dt>\n      <dd>Disciplina ${esc(t)}</dd>`
   ).join('\n');
+
+  const prereqShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#1a3a6b" stroke-width="1.6" marker-end="url(#arrowhead-legend-1)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#1a3a6b" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
+
+  const specialShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#b45309" stroke-width="1.6" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend-2)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#b45309" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="8,4"/></svg>`;
+
+  const coreqShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#475569" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend-3)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#475569" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="3,3"/></svg>`;
+
   return `    <h2 class="legend-title">Legenda</h2>
     <dl class="legend-list">
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${prereqShape}</dt>
       <dd>Pré-requisito</dd>
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${specialShape}</dt>
       <dd>Pré-requisito especial (RE)</dd>
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${coreqShape}</dt>
       <dd>Co-requisito</dd>
       <dt><span class="credit-req-badge">XX CR</span></dt>
       <dd>Requisito de créditos mínimos</dd>
@@ -406,8 +489,23 @@ ${tagRules}
     }
     .arrow-line {
       fill: none;
-      stroke: #333;
-      stroke-width: 1.5;
+      stroke: #1a3a6b;
+    }
+    .arrows-layer.link-style-paths .arrow-line {
+      opacity: 0.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .arrows-layer.link-style-arrows .arrow-line {
+      opacity: 0.9;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    .arrow-group[data-type="special"] .arrow-line {
+      stroke: #b45309;
+    }
+    .arrow-group[data-type="corequisite"] .arrow-line {
+      stroke: #475569;
     }
     .arrows-layer.hidden .arrow-group { display: none; }
     .arrow-label {

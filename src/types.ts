@@ -74,3 +74,11 @@ export interface ArrowRoute {
 export interface RouteData {
   arrows: ArrowRoute[];
 }
+
+// ─── Opções de renderização ──────────────────────────────────────────────────
+
+export type LinkRenderStyle = 'arrows' | 'paths';
+
+export interface RenderOptions {
+  linkStyle: LinkRenderStyle;
+}

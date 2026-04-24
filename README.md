@@ -25,7 +25,9 @@ Veja aqui um exemplo de resultado do utilitário (criado a partir do exemplo [99
 
 - Informações gerais do curso exibidas no topo
 - Disciplinas organizadas em colunas por nível (semestre), com cabeçalho em algarismos romanos e total de créditos
-- Setas de pré-requisito em segmentos retos, roteadas entre os retângulos das disciplinas
+- Ligações de pré-requisito com dois estilos selecionáveis por flag:
+  - **`arrows`**: setas clássicas com ponta
+  - **`paths`**: caminhos espessos estilo Sankey
 - Três tipos de setas visuais:
   - **Linha sólida** — pré-requisito comum
   - **Linha tracejada** — pré-requisito especial
@@ -160,6 +162,12 @@ npm run build
 
 # Gerar a matriz curricular (gera um arquivo HTML com o mesmo nome do arquivo JSON de entrada)
 node dist/mci.js examples/99TI.json
+
+# Escolher o estilo das ligações (setas clássicas)
+node dist/mci.js examples/99TI.json --links arrows
+
+# Escolher o estilo das ligações (caminhos estilo Sankey)
+node dist/mci.js examples/99TI.json --links paths
 
 # Exibir ajuda (sem argumentos de entrada)
 node dist/mci.js
