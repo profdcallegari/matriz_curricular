@@ -13,7 +13,7 @@
       color: #222;
     }
 
-    /* Cabeçalho */
+    /* Cabecalho */
     .course-header {
       background: #1a3a6b;
       color: #fff;
@@ -90,14 +90,14 @@
       padding: 24px 0;
     }
 
-    /* Wrapper do cartão */
+    /* Wrapper do cartao */
     .card-wrapper {
       position: relative;
       width: 100%;
       height: 60px;
     }
 
-    /* Badge de requisito de créditos mínimos */
+    /* Badge de requisito de creditos minimos */
     .credit-req-badge {
       font-size: 0.65rem;
       font-weight: 700;
@@ -116,7 +116,7 @@
       pointer-events: none;
     }
 
-    /* Cartões de disciplina */
+    /* Cartoes de disciplina */
     .course-card {
       width: 100%;
       height: 60px;
@@ -442,7 +442,7 @@
       font-style: italic;
     }
 
-    /* Totalizador de créditos */
+    /* Totalizador de creditos */
     .credits-summary {
       margin-top: 16px;
       padding-top: 12px;
@@ -469,6 +469,7 @@
     .credits-summary-table tr:not(.credits-total-row) td:first-child {
       padding-top: 4px;
     }
+
   </style>
 </head>
 <body>
@@ -1725,26 +1726,26 @@
       .map(c => [c.id, c.color])
   );
 
-  // ── Escala responsiva da matriz ──────────────────────────────────────────────
+  // Responsive matrix scale
   function applyMatrixScale() {
-    var matrixArea   = document.querySelector('.matrix-area');
+    var matrixArea = document.querySelector('.matrix-area');
     var matrixCanvas = document.querySelector('.matrix-canvas');
-    var legendPanel  = document.querySelector('.legend-panel');
+    var legendPanel = document.querySelector('.legend-panel');
     if (!matrixArea || !matrixCanvas) return;
 
-    var baseWidth  = parseFloat(matrixArea.style.getPropertyValue('--matrix-base-w'));
+    var baseWidth = parseFloat(matrixArea.style.getPropertyValue('--matrix-base-w'));
     var baseHeight = parseFloat(matrixArea.style.getPropertyValue('--matrix-base-h'));
     if (!baseWidth || !baseHeight) return;
 
-    var padding    = 24;
-    var isStacked  = window.innerWidth <= 1200;
-    var legendW    = (!isStacked && legendPanel) ? (legendPanel.offsetWidth + 16) : 0;
+    var padding = 24;
+    var isStacked = window.innerWidth <= 1200;
+    var legendW = (!isStacked && legendPanel) ? (legendPanel.offsetWidth + 16) : 0;
     var availWidth = window.innerWidth - padding * 2 - legendW;
-    var scale      = Math.min(1, availWidth / baseWidth);
-    var scaledW    = baseWidth  * scale;
-    var scaledH    = baseHeight * scale;
+    var scale = Math.min(1, availWidth / baseWidth);
+    var scaledW = baseWidth * scale;
+    var scaledH = baseHeight * scale;
 
-    matrixArea.style.width  = scaledW + 'px';
+    matrixArea.style.width = scaledW + 'px';
     matrixArea.style.height = scaledH + 'px';
     matrixCanvas.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
 
@@ -1754,9 +1755,9 @@
   applyMatrixScale();
   window.addEventListener('resize', applyMatrixScale);
 
-  // ── Toggle de setas ─────────────────────────────────────────────────────────
+  // Arrow visibility toggle
   const toggleArrows = document.getElementById('toggle-arrows');
-  const arrowsLayer  = document.querySelector('.arrows-layer');
+  const arrowsLayer = document.querySelector('.arrows-layer');
 
   arrowsLayer.classList.add('hidden');
 
@@ -1764,17 +1765,17 @@
     arrowsLayer.classList.toggle('hidden', !toggleArrows.checked);
   });
 
-  // ── Hover sobre cartões ─────────────────────────────────────────────────────
-  const allCards  = Array.from(document.querySelectorAll('.course-card'));
+  // Hover over cards
+  const allCards = Array.from(document.querySelectorAll('.course-card'));
   const allArrows = Array.from(document.querySelectorAll('.arrow-group'));
 
   function getRelated(code) {
-    const prereqs    = new Set();
+    const prereqs = new Set();
     const dependents = new Set();
     for (const req of REQUIREMENTS) {
       if (req.type === 'credit_requirement') continue;
-      if (req.to === code && req.from)   prereqs.add(req.from);
-      if (req.from === code)             dependents.add(req.to);
+      if (req.to === code && req.from) prereqs.add(req.from);
+      if (req.from === code) dependents.add(req.to);
     }
     return { prereqs, dependents };
   }
@@ -1793,7 +1794,7 @@
 
     allArrows.forEach(arrow => {
       const from = arrow.dataset.from;
-      const to   = arrow.dataset.to;
+      const to = arrow.dataset.to;
       const active = (from === code || to === code);
       arrow.style.display = active ? '' : 'none';
     });
@@ -1812,13 +1813,13 @@
   allCards.forEach(card => {
     card.addEventListener('mouseenter', () => onCardEnter(card.dataset.code));
     card.addEventListener('mouseleave', onCardLeave);
-    card.addEventListener('focusin',    () => onCardEnter(card.dataset.code));
-    card.addEventListener('focusout',   onCardLeave);
+    card.addEventListener('focusin', () => onCardEnter(card.dataset.code));
+    card.addEventListener('focusout', onCardLeave);
   });
 
-  // ── Popup de detalhes ───────────────────────────────────────────────────────
-  const popup       = document.getElementById('course-popup');
-  const popupClose  = popup.querySelector('.popup-close');
+  // Details popup
+  const popup = document.getElementById('course-popup');
+  const popupClose = popup.querySelector('.popup-close');
   const popupHeader = popup.querySelector('.popup-header');
   const defaultPopupHeaderColor = '#1a3a6b';
 
@@ -1831,15 +1832,15 @@
       : null;
     popupHeader.style.background = popupHeaderColor || defaultPopupHeaderColor;
 
-    document.getElementById('popup-code').textContent     = course.code;
-    document.getElementById('popup-name').textContent     = course.name;
-    document.getElementById('popup-hours').textContent    = course.hours + ' h';
-    document.getElementById('popup-credits').textContent  = course.credits + ' cr';
+    document.getElementById('popup-code').textContent = course.code;
+    document.getElementById('popup-name').textContent = course.name;
+    document.getElementById('popup-hours').textContent = course.hours + ' h';
+    document.getElementById('popup-credits').textContent = course.credits + ' cr';
     document.getElementById('popup-syllabus').textContent = course.syllabus || '—';
 
     const tagsEl = document.getElementById('popup-tags');
     tagsEl.innerHTML = '';
-    course.tags.forEach(function(tag) {
+    course.tags.forEach(function (tag) {
       const span = document.createElement('span');
       span.className = 'tag tag-' + tag;
       span.textContent = tag;
@@ -1847,12 +1848,14 @@
     });
 
     const prereqs = REQUIREMENTS
-      .filter(function(r) { return r.to === code && r.from; })
-      .map(function(r) {
+      .filter(function (r) { return r.to === code && r.from; })
+      .map(function (r) {
         const c = courseMap.get(r.from);
         return { code: r.from, name: c ? c.name : '', desc: r.description };
       });
-    const creditReq = REQUIREMENTS.find(function(r) { return r.type === 'credit_requirement' && r.to === code; });
+    const creditReq = REQUIREMENTS.find(function (r) {
+      return r.type === 'credit_requirement' && r.to === code;
+    });
 
     const prereqEl = document.getElementById('popup-prereqs');
     prereqEl.innerHTML = '';
@@ -1864,7 +1867,7 @@
     } else {
       const ul = document.createElement('ul');
       ul.className = 'popup-req-list';
-      prereqs.forEach(function(p) {
+      prereqs.forEach(function (p) {
         const li = document.createElement('li');
         li.className = 'popup-req-item';
         const codeSpan = document.createElement('span');
@@ -1890,8 +1893,8 @@
     }
 
     const dependents = REQUIREMENTS
-      .filter(function(r) { return r.from === code && r.to; })
-      .map(function(r) {
+      .filter(function (r) { return r.from === code && r.to; })
+      .map(function (r) {
         const c = courseMap.get(r.to);
         return { code: r.to, name: c ? c.name : '' };
       });
@@ -1906,7 +1909,7 @@
     } else {
       const ul = document.createElement('ul');
       ul.className = 'popup-req-list';
-      dependents.forEach(function(d) {
+      dependents.forEach(function (d) {
         const li = document.createElement('li');
         li.className = 'popup-req-item';
         const codeSpan = document.createElement('span');
@@ -1944,6 +1947,7 @@
   popup.addEventListener('click', e => { if (e.target === popup) closePopup(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 })();
+
 </script>
 </body>
 </html>
