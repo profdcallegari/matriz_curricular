@@ -1,4 +1,4 @@
-import { CurriculumFile, CourseInput, RequirementInput, ArrowRoute, Point, LayoutData, ColumnLayout, CardRect, RouteData } from '../types';
+import { CurriculumFile, CourseInput, RequirementInput, ArrowRoute, Point, LayoutData, ColumnLayout, CardRect, RouteData, RenderOptions, LinkRenderStyle, CategoryInput } from '../types';
 import { CARD_WIDTH, COL_HEADER_H, HEADER_H, PAGE_MARGIN } from '../layout';
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
@@ -6,16 +6,21 @@ import { CARD_WIDTH, COL_HEADER_H, HEADER_H, PAGE_MARGIN } from '../layout';
 export function renderHtml(
   data: CurriculumFile,
   layout: LayoutData,
-  routes: RouteData
+  routes: RouteData,
+  options: RenderOptions = { linkStyle: 'paths' }
 ): string {
   const courseMap    = new Map<string, CourseInput>(data.courses.map(c => [c.code, c]));
   const reqMap       = new Map<number, RequirementInput>(data.requirements.map((r, i) => [i, r]));
+  const categories   = data.categories ?? [];
+  const categoryMap  = new Map<string, CategoryInput>(categories.map(c => [c.id, c]));
   const uniqueTags   = Array.from(new Set(data.courses.flatMap(c => c.tags)));
   const creditReqMap = new Map<string, number>(
     data.requirements
       .filter(r => r.type === 'credit_requirement' && r.min_credits !== undefined)
       .map(r => [r.to, r.min_credits!])
   );
+  const linkStyle = options.linkStyle;
+  const useCategoryFill = data.display?.card_fill_style === 'category';
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -24,27 +29,25 @@ export function renderHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(data.curriculum.name)}</title>
   <style>
-${renderCss(uniqueTags)}
+${renderCss(uniqueTags, categories)}
   </style>
 </head>
 <body>
 ${renderHeader(data)}
 <div class="matrix-wrapper">
-  <div class="matrix-area" style="width:${layout.canvasWidth}px; min-height:${layout.canvasHeight}px;">
-    <div class="columns-row">
-${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditReqMap)).join('\n')}
+  <div class="matrix-area" style="--matrix-base-w:${layout.canvasWidth}px; --matrix-base-h:${layout.canvasHeight}px;">
+    <div class="matrix-canvas" style="width:${layout.canvasWidth}px; height:${layout.canvasHeight}px;">
+      <svg class="arrows-layer link-style-${linkStyle}" width="${layout.canvasWidth}" height="${layout.canvasHeight}" aria-hidden="true">
+${renderArrowDefs(linkStyle)}
+${routes.arrows.map(a => renderArrow(a, reqMap, linkStyle)).join('\n')}
+      </svg>
+  <div class="columns-row">
+${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditReqMap, categoryMap, useCategoryFill)).join('\n')}
+  </div>
     </div>
-    <svg class="arrows-layer" width="${layout.canvasWidth}" height="${layout.canvasHeight}" aria-hidden="true">
-      <defs>
-        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
-        </marker>
-      </defs>
-${routes.arrows.map(a => renderArrow(a, reqMap)).join('\n')}
-    </svg>
   </div>
   <aside class="legend-panel">
-${renderLegend(uniqueTags)}
+${renderLegend(uniqueTags, linkStyle, categories)}
 ${renderCreditSummary(data.courses, uniqueTags)}
   </aside>
 </div>
@@ -67,12 +70,18 @@ function renderHeader(data: CurriculumFile): string {
 
 // ─── Colunas e cartões ────────────────────────────────────────────────────────
 
-function renderColumn(col: ColumnLayout, courseMap: Map<string, CourseInput>, creditReqMap: Map<string, number>): string {
+function renderColumn(
+  col: ColumnLayout,
+  courseMap: Map<string, CourseInput>,
+  creditReqMap: Map<string, number>,
+  categoryMap: Map<string, CategoryInput>,
+  useCategoryFill: boolean
+): string {
   const roman = toRoman(col.level);
   const cards = col.cards.map((card: CardRect) => {
     const course = courseMap.get(card.courseCode)!;
     const minCredits = creditReqMap.get(card.courseCode);
-    return renderCard(card, course, minCredits);
+    return renderCard(card, course, minCredits, categoryMap, useCategoryFill);
   }).join('\n');
 
   return `      <div class="level-column" data-level="${col.level}">
@@ -86,13 +95,20 @@ ${cards}
       </div>`;
 }
 
-function renderCard(card: CardRect, course: CourseInput, minCredits?: number): string {
+function renderCard(
+  card: CardRect,
+  course: CourseInput,
+  minCredits: number | undefined,
+  categoryMap: Map<string, CategoryInput>,
+  useCategoryFill: boolean
+): string {
   const tags = course.tags.map(t => `<span class="tag tag-${esc(t)}">${esc(t)}</span>`).join('');
+  const fillClass = resolveCategoryFillClass(course, categoryMap, useCategoryFill);
   const creditBadge = minCredits !== undefined
     ? `\n          <div class="credit-req-badge">${minCredits} CR</div>`
     : '';
   return `          <div class="card-wrapper">${creditBadge}
-            <div class="course-card"
+            <div class="course-card${fillClass}"
                id="card-${esc(course.code)}"
                data-code="${esc(course.code)}"
                tabindex="0"
@@ -107,12 +123,24 @@ function renderCard(card: CardRect, course: CourseInput, minCredits?: number): s
           </div>`;
 }
 
+function resolveCategoryFillClass(
+  course: CourseInput,
+  categoryMap: Map<string, CategoryInput>,
+  useCategoryFill: boolean
+): string {
+  if (!useCategoryFill) return '';
+  if (!course.category) return '';
+  const category = categoryMap.get(course.category);
+  if (!category || !category.color) return '';
+  return ` fill-category fill-${cssToken(category.id)}`;
+}
+
 // ─── Setas SVG ────────────────────────────────────────────────────────────────
 
-function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>): string {
+function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>, linkStyle: LinkRenderStyle): string {
   const req = reqMap.get(arrow.requirementIndex);
   const dashArray = arrowDash(arrow.type);
-  const pointsStr = arrow.points.map((p: Point) => `${p.x},${p.y}`).join(' ');
+  const width = arrowStrokeWidth(arrow.type, linkStyle);
   const from = req?.from ?? '';
   const to   = req?.to   ?? '';
 
@@ -122,14 +150,30 @@ function renderArrow(arrow: ArrowRoute, reqMap: Map<number, RequirementInput>): 
     labelEl = `\n    <text class="arrow-label" x="${mid.x}" y="${mid.y - 4}">${esc(arrow.label)}</text>`;
   }
 
-  return `    <g class="arrow-group"
+  if (linkStyle === 'arrows') {
+    const pointsStr = arrow.points.map((p: Point) => `${p.x},${p.y}`).join(' ');
+    return `    <g class="arrow-group"
        data-type="${arrow.type}"
        data-from="${esc(from)}"
        data-to="${esc(to)}">
       <polyline points="${pointsStr}"
-                stroke-dasharray="${dashArray}"
-                class="arrow-line"
-                marker-end="url(#arrowhead)"/>
+      stroke-dasharray="${dashArray}"
+      stroke-width="${width}"
+      class="arrow-line"
+      marker-end="url(#arrowhead)"/>
+      ${labelEl}
+    </g>`;
+  }
+
+  const pathD = sankeyPathFromPoints(arrow.points);
+  return `    <g class="arrow-group"
+       data-type="${arrow.type}"
+       data-from="${esc(from)}"
+       data-to="${esc(to)}">
+      <path d="${pathD}"
+            stroke-dasharray="${dashArray}"
+            stroke-width="${width}"
+            class="arrow-line"/>
       ${labelEl}
     </g>`;
 }
@@ -138,6 +182,63 @@ function arrowDash(type: string): string {
   if (type === 'special')     return '8,4';
   if (type === 'corequisite') return '3,3';
   return 'none';
+}
+
+function arrowStrokeWidth(type: string, linkStyle: LinkRenderStyle): number {
+  if (linkStyle === 'arrows') {
+    if (type === 'corequisite') return 1.4;
+    return 1.6;
+  }
+  if (type === 'special') return 5;
+  if (type === 'corequisite') return 4;
+  return 6;
+}
+
+function renderArrowDefs(linkStyle: LinkRenderStyle): string {
+  if (linkStyle !== 'arrows') return '';
+  return `      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+        </marker>
+      </defs>`;
+}
+
+function sankeyPathFromPoints(points: Point[]): string {
+  if (points.length === 0) return '';
+  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+  if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+
+  const radius = 12;
+  let d = `M ${points[0].x} ${points[0].y}`;
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const next = points[i + 1];
+
+    const inDx = curr.x - prev.x;
+    const inDy = curr.y - prev.y;
+    const outDx = next.x - curr.x;
+    const outDy = next.y - curr.y;
+
+    const inLen = Math.hypot(inDx, inDy);
+    const outLen = Math.hypot(outDx, outDy);
+    if (inLen === 0 || outLen === 0) continue;
+
+    const corner = Math.min(radius, inLen * 0.45, outLen * 0.45);
+
+    const enterX = curr.x - (inDx / inLen) * corner;
+    const enterY = curr.y - (inDy / inLen) * corner;
+    const exitX = curr.x + (outDx / outLen) * corner;
+    const exitY = curr.y + (outDy / outLen) * corner;
+
+    d += ` L ${enterX} ${enterY}`;
+    d += ` Q ${curr.x} ${curr.y} ${exitX} ${exitY}`;
+  }
+
+  const last = points[points.length - 1];
+  d += ` L ${last.x} ${last.y}`;
+  return d;
 }
 
 // ─── Popup de detalhes ────────────────────────────────────────────────────────
@@ -185,21 +286,45 @@ function renderPopup(): string {
 
 // ─── Legenda ──────────────────────────────────────────────────────────────────
 
-function renderLegend(tags: string[]): string {
-  const svgDefs = `<defs><marker id="arrowhead-legend" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs>`;
+function renderLegend(tags: string[], linkStyle: LinkRenderStyle, categories: CategoryInput[]): string {
   const tagItems = tags.map(t =>
     `      <dt><span class="tag tag-${esc(t)}">${esc(t)}</span></dt>\n      <dd>Disciplina ${esc(t)}</dd>`
   ).join('\n');
+
+  const categoryItems = categories.map(category => {
+    const styleAttr = category.color
+      ? ` style="background:${escAttr(category.color)}; border-color:${escAttr(category.color)};"`
+      : '';
+    return `      <dt><span class="category-chip"${styleAttr}></span></dt>\n      <dd>${esc(category.name)}</dd>`;
+  }).join('\n');
+
+  const categorySection = categoryItems
+    ? `\n      <dt class="legend-subtitle">Eixos</dt>\n      <dd class="legend-subtitle-spacer"></dd>\n${categoryItems}`
+    : '';
+
+  const prereqShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#1a3a6b" stroke-width="1.6" marker-end="url(#arrowhead-legend-1)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#1a3a6b" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
+
+  const specialShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#b45309" stroke-width="1.6" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend-2)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#b45309" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="8,4"/></svg>`;
+
+  const coreqShape = linkStyle === 'arrows'
+    ? `<svg width="60" height="14"><defs><marker id="arrowhead-legend-3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#333"/></marker></defs><line x1="2" y1="7" x2="58" y2="7" stroke="#475569" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend-3)"/></svg>`
+    : `<svg width="60" height="14"><path d="M2 7 C 16 7, 20 7, 30 7 S 44 7, 58 7" stroke="#475569" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="3,3"/></svg>`;
+
   return `    <h2 class="legend-title">Legenda</h2>
     <dl class="legend-list">
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${prereqShape}</dt>
       <dd>Pré-requisito</dd>
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="8,4" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${specialShape}</dt>
       <dd>Pré-requisito especial (RE)</dd>
-      <dt><svg width="60" height="14">${svgDefs}<line x1="0" y1="7" x2="50" y2="7" stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowhead-legend)"/></svg></dt>
+      <dt>${coreqShape}</dt>
       <dd>Co-requisito</dd>
       <dt><span class="credit-req-badge">XX CR</span></dt>
       <dd>Requisito de créditos mínimos</dd>
+    ${categorySection}
 ${tagItems}
     </dl>
     <div class="legend-toggle">
@@ -255,11 +380,18 @@ const TAG_PALETTE: Array<[string, string]> = [
   ['#ffeeba', '#533f03'],
 ];
 
-function renderCss(tags: string[]): string {
+function renderCss(tags: string[], categories: CategoryInput[]): string {
   const tagRules = tags.map((t, i) => {
     const [bg, fg] = TAG_PALETTE[i % TAG_PALETTE.length];
     return `    .tag-${esc(t)} { background: ${bg}; color: ${fg}; }`;
   }).join('\n');
+
+  const fillRules = categories
+    .filter(category => !!category.color)
+    .map(category =>
+      `    .course-card.fill-${cssToken(category.id)} { background: ${category.color}; border-color: ${category.color}; }`
+    ).join('\n');
+
   return `    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -284,11 +416,30 @@ function renderCss(tags: string[]): string {
       align-items: flex-start;
       gap: 16px;
       padding: 16px;
-      overflow-x: auto;
     }
     .matrix-area {
+      width: var(--matrix-base-w);
+      height: var(--matrix-base-h);
+      overflow: hidden;
       position: relative;
       flex-shrink: 0;
+    }
+    .matrix-canvas {
+      position: relative;
+      transform-origin: top left;
+      isolation: isolate;
+    }
+    @media (max-width: 1200px) {
+      .matrix-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 12px;
+      }
+      .legend-panel {
+        width: fit-content;
+        max-width: 100%;
+      }
     }
 
     /* Colunas */
@@ -296,6 +447,8 @@ function renderCss(tags: string[]): string {
       display: flex;
       gap: 60px;
       align-items: flex-start;
+      position: relative;
+      z-index: 1;
     }
     .level-column {
       width: ${CARD_WIDTH}px;
@@ -387,6 +540,18 @@ function renderCss(tags: string[]): string {
     .card-credits { font-size: 0.75rem; color: #555; white-space: nowrap; margin-left: 4px; }
     .card-footer  { position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 6px 4px; display: flex; gap: 4px; flex-wrap: wrap; min-height: 16px; }
     .card-footer:not(:empty) { background: rgba(255,255,255,0.85); }
+    .course-card.fill-category .card-name,
+    .course-card.fill-category .card-credits {
+      color: #222;
+    }
+    .course-card.fill-category .card-footer:not(:empty) {
+      background: rgba(255, 255, 255, 0.45);
+    }
+    .course-card.fill-category .tag {
+      background: rgba(0,0,0,0.12);
+      color: #222;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
 
     /* Tags */
     .tag {
@@ -396,6 +561,7 @@ function renderCss(tags: string[]): string {
       font-weight: 600;
     }
 ${tagRules}
+${fillRules}
 
     /* Setas SVG */
     .arrows-layer {
@@ -403,11 +569,27 @@ ${tagRules}
       top: 0;
       left: 0;
       pointer-events: none;
+      z-index: 0;
     }
     .arrow-line {
       fill: none;
-      stroke: #333;
-      stroke-width: 1.5;
+      stroke: #1a3a6b;
+    }
+    .arrows-layer.link-style-paths .arrow-line {
+      opacity: 0.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .arrows-layer.link-style-arrows .arrow-line {
+      opacity: 0.9;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+    }
+    .arrow-group[data-type="special"] .arrow-line {
+      stroke: #b45309;
+    }
+    .arrow-group[data-type="corequisite"] .arrow-line {
+      stroke: #475569;
     }
     .arrows-layer.hidden .arrow-group { display: none; }
     .arrow-label {
@@ -439,6 +621,26 @@ ${tagRules}
       font-size: 0.78rem;
     }
     .legend-list dt { display: flex; align-items: center; }
+    .legend-subtitle {
+      grid-column: 1 / -1;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #e5e7eb;
+      font-weight: 700;
+      color: #374151;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .legend-subtitle-spacer { display: none; }
+    .category-chip {
+      display: inline-block;
+      width: 24px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid #9ca3af;
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    }
     .legend-toggle {
       margin-top: 20px;
       padding-top: 12px;
@@ -668,6 +870,7 @@ function renderJs(data: CurriculumFile, _layout: LayoutData, _routes: RouteData)
       credits: c.credits,
       syllabus: c.syllabus,
       tags: c.tags,
+      category: c.category ?? null,
     }))
   );
 
@@ -681,13 +884,55 @@ function renderJs(data: CurriculumFile, _layout: LayoutData, _routes: RouteData)
     }))
   );
 
+  const categories = JSON.stringify(
+    (data.categories ?? []).map(c => ({
+      id: c.id,
+      color: c.color ?? null,
+    }))
+  );
+
   return `(function () {
   'use strict';
 
   const COURSES = ${courses};
   const REQUIREMENTS = ${requirements};
+  const CATEGORIES = ${categories};
 
   const courseMap = new Map(COURSES.map(c => [c.code, c]));
+  const categoryColorMap = new Map(
+    CATEGORIES
+      .filter(c => typeof c.color === 'string' && c.color.trim() !== '')
+      .map(c => [c.id, c.color])
+  );
+
+  // ── Escala responsiva da matriz ──────────────────────────────────────────────
+  function applyMatrixScale() {
+    var matrixArea   = document.querySelector('.matrix-area');
+    var matrixCanvas = document.querySelector('.matrix-canvas');
+    var legendPanel  = document.querySelector('.legend-panel');
+    if (!matrixArea || !matrixCanvas) return;
+
+    var baseWidth  = parseFloat(matrixArea.style.getPropertyValue('--matrix-base-w'));
+    var baseHeight = parseFloat(matrixArea.style.getPropertyValue('--matrix-base-h'));
+    if (!baseWidth || !baseHeight) return;
+
+    var padding    = 24;
+    var isStacked  = window.innerWidth <= 1200;
+    var legendW    = (!isStacked && legendPanel) ? (legendPanel.offsetWidth + 16) : 0;
+    var availWidth = window.innerWidth - padding * 2 - legendW;
+    var scale      = Math.min(1, availWidth / baseWidth);
+    var scaledW    = baseWidth  * scale;
+    var scaledH    = baseHeight * scale;
+
+    matrixArea.style.width  = scaledW + 'px';
+    matrixArea.style.height = scaledH + 'px';
+    matrixCanvas.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
+
+    if (legendPanel) legendPanel.style.width = isStacked ? scaledW + 'px' : '';
+  }
+
+  applyMatrixScale();
+  window.addEventListener('resize', applyMatrixScale);
 
   // ── Toggle de setas ─────────────────────────────────────────────────────────
   const toggleArrows = document.getElementById('toggle-arrows');
@@ -757,10 +1002,17 @@ function renderJs(data: CurriculumFile, _layout: LayoutData, _routes: RouteData)
   // ── Popup de detalhes ───────────────────────────────────────────────────────
   const popup       = document.getElementById('course-popup');
   const popupClose  = popup.querySelector('.popup-close');
+  const popupHeader = popup.querySelector('.popup-header');
+  const defaultPopupHeaderColor = '#1a3a6b';
 
   function openPopup(code) {
     const course = courseMap.get(code);
     if (!course) return;
+
+    const popupHeaderColor = course.category
+      ? categoryColorMap.get(course.category)
+      : null;
+    popupHeader.style.background = popupHeaderColor || defaultPopupHeaderColor;
 
     document.getElementById('popup-code').textContent     = course.code;
     document.getElementById('popup-name').textContent     = course.name;
@@ -889,6 +1141,19 @@ function esc(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function escAttr(str: string): string {
+  return esc(str);
+}
+
+function cssToken(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/--+/g, '-');
 }
 
 function toRoman(n: number): string {
