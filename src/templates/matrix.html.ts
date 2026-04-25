@@ -32,7 +32,8 @@ ${renderCss(uniqueTags)}
 <body>
 ${renderHeader(data)}
 <div class="matrix-wrapper">
-  <div class="matrix-area" style="width:${layout.canvasWidth}px; min-height:${layout.canvasHeight}px;">
+  <div class="matrix-area" style="--matrix-base-w:${layout.canvasWidth}px; --matrix-base-h:${layout.canvasHeight}px;">
+    <div class="matrix-canvas" style="width:${layout.canvasWidth}px; height:${layout.canvasHeight}px;">
     <div class="columns-row">
 ${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditReqMap)).join('\n')}
     </div>
@@ -40,6 +41,7 @@ ${layout.columns.map((col: ColumnLayout) => renderColumn(col, courseMap, creditR
 ${renderArrowDefs(linkStyle)}
 ${routes.arrows.map(a => renderArrow(a, reqMap, linkStyle)).join('\n')}
     </svg>
+    </div>
   </div>
   <aside class="legend-panel">
 ${renderLegend(uniqueTags, linkStyle)}
@@ -368,10 +370,19 @@ function renderCss(tags: string[]): string {
       gap: 16px;
       padding: 16px;
       overflow-x: auto;
+      overflow-y: visible;
     }
     .matrix-area {
+      width: var(--matrix-base-w);
+      height: var(--matrix-base-h);
+      overflow: hidden;
       position: relative;
       flex-shrink: 0;
+    }
+    .matrix-canvas {
+      position: relative;
+      transform-origin: top left;
+      transform: scale(1);
     }
 
     /* Colunas */
@@ -751,6 +762,76 @@ ${tagRules}
     }
     .credits-summary-table tr:not(.credits-total-row) td:first-child {
       padding-top: 4px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1200px) {
+      .matrix-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 12px;
+      }
+      .matrix-area {
+        align-self: flex-start;
+      }
+      .legend-panel {
+        min-width: 0;
+        width: fit-content;
+        max-width: 100%;
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .course-header {
+        padding: 12px 14px;
+      }
+      .course-title {
+        font-size: 1.05rem;
+        line-height: 1.35;
+      }
+      .course-meta {
+        font-size: 0.78rem;
+      }
+
+      .matrix-wrapper {
+        padding: 8px;
+        gap: 10px;
+      }
+
+      .legend-panel {
+        padding: 10px;
+      }
+      .legend-title {
+        font-size: 0.84rem;
+      }
+      .legend-list {
+        font-size: 0.74rem;
+        gap: 5px 8px;
+      }
+
+      .popup {
+        padding: 8px;
+      }
+      .popup-content {
+        border-radius: 10px;
+        max-height: 94vh;
+      }
+      .popup-header {
+        padding: 16px 44px 14px 14px;
+      }
+      .popup-body {
+        padding: 14px;
+        gap: 14px;
+      }
+      .popup-stats {
+        flex-direction: column;
+      }
+      .popup-stat {
+        align-items: flex-start;
+        text-align: left;
+      }
     }`;  
 }
 
@@ -786,6 +867,64 @@ function renderJs(data: CurriculumFile, _layout: LayoutData, _routes: RouteData)
   const REQUIREMENTS = ${requirements};
 
   const courseMap = new Map(COURSES.map(c => [c.code, c]));
+
+  // ── Escala responsiva da matriz (cartões + setas) ─────────────────────────
+  const matrixArea = document.querySelector('.matrix-area');
+  const matrixCanvas = document.querySelector('.matrix-canvas');
+  const matrixWrapper = document.querySelector('.matrix-wrapper');
+  const legendPanel = document.querySelector('.legend-panel');
+
+  function parsePxVar(el, name) {
+    const raw = getComputedStyle(el).getPropertyValue(name).trim();
+    const parsed = Number(raw.replace('px', ''));
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function applyMatrixScale() {
+    if (!matrixArea || !matrixCanvas) return;
+
+    const baseWidth = parsePxVar(matrixArea, '--matrix-base-w');
+    const baseHeight = parsePxVar(matrixArea, '--matrix-base-h');
+    if (!baseWidth || !baseHeight) return;
+
+    const wrapperStyles = matrixWrapper ? getComputedStyle(matrixWrapper) : null;
+    const wrapperPaddingX = wrapperStyles
+      ? (parseFloat(wrapperStyles.paddingLeft) + parseFloat(wrapperStyles.paddingRight))
+      : 0;
+
+    const isStacked = window.matchMedia('(max-width: 1200px)').matches;
+    let availableWidth = window.innerWidth - wrapperPaddingX;
+
+    if (!isStacked && legendPanel) {
+      const legendWidth = legendPanel.getBoundingClientRect().width;
+      const gap = wrapperStyles ? parseFloat(wrapperStyles.columnGap || wrapperStyles.gap || '16') : 16;
+      availableWidth -= legendWidth + gap;
+    }
+
+    const minUsableWidth = 260;
+    const clampedWidth = Math.max(minUsableWidth, availableWidth);
+    const scale = Math.min(1, clampedWidth / baseWidth);
+    const scaledWidth = baseWidth * scale;
+    const scaledHeight = baseHeight * scale;
+
+    matrixArea.style.width = scaledWidth + 'px';
+    matrixArea.style.height = scaledHeight + 'px';
+    matrixCanvas.style.transform = 'scale(' + scale + ')';
+
+    if (legendPanel) {
+      if (isStacked) {
+        legendPanel.style.width = 'fit-content';
+        legendPanel.style.maxWidth = scaledWidth + 'px';
+      } else {
+        legendPanel.style.width = '';
+        legendPanel.style.maxWidth = '';
+      }
+    }
+  }
+
+  applyMatrixScale();
+  window.addEventListener('resize', applyMatrixScale);
+  window.addEventListener('orientationchange', applyMatrixScale);
 
   // ── Toggle de setas ─────────────────────────────────────────────────────────
   const toggleArrows = document.getElementById('toggle-arrows');
