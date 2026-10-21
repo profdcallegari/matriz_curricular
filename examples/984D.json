@@ -59,7 +59,7 @@
       "hours": 30,
       "credits": 2,
       "level": 1,
-      "syllabus": "Estudo do método científico e dos procedimentos de pesquisa acadêmica e tecnológica. Planejamento, estruturação, redação e comunicação de projetos e artigos científicos. Normas técnicas de documentação e princípios éticos na pesquisa científica.",
+      "syllabus": "Fundamentos do conhecimento científico e seus métodos. Pesquisa bibliográfica e resumos. Estudos dos conceitos de fatos, leis, teorias e hipóteses. Estilo de escrita: diretrizes gerais e específicas. Apresentação de algoritmos e textos matemáticos. Declaração, desenvolvimento e defesa de hipóteses. Construção de um projeto científico. Ética na escrita. Diretrizes para a construção de apresentações.",
       "tags": []
     },
 
@@ -188,7 +188,7 @@
       "hours": 60,
       "credits": 4,
       "level": 4,
-      "syllabus": "Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos. Introdução ao Aprendizado de Máquina com ênfase em Aprendizado por reforço.",
+      "syllabus": "Estudo teórico-prático das diversas abordagens de formalização e resolução de problemas utilizando algoritmos de inteligência artificial. Estudo teórico-prático de uso de algoritmos de busca para resolução de problemas em agentes autônomos. Apresentação de abordagens para representação de conhecimento. Apresentação de técnicas de geração automática de planos.",
       "tags": ["online"]
     },
     {
@@ -407,7 +407,7 @@
       "hours": 30,
       "credits": 2,
       "level": 7,
-      "syllabus": "Princípios e práticas de Machine Learning Operations (MLOps). Ciclo de vida operacional de modelos de aprendizado de máquina: versionamento de dados, pipelines de treinamento contínuo, validação, conteinerização, estratégias de implantação em produção (deployment), monitoramento contínuo de latência, desempenho e desvio de dados (drift).",
+      "syllabus": "Estudo das principais técnicas, ferramentas e as melhores práticas para implantação, avaliação, monitoramento e operação de sistemas de Machine Learning (ML) em produção. Engenharia de Dados e Features. Desenvolvimento e Avaliação pré-produção de Modelos. Modelos em produção e serviço de inferência. Infraestrura e ferramentas para operação de Sistemas de Machine Learning.",
       "tags": []
     },
     {
